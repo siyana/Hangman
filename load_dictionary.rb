@@ -8,7 +8,7 @@ class LoadDictionary
     #load word_dictionary
     all_words = JSON.parse (IO.read WORD_DICTIONARY)
     make_dictionary_by_word_length all_words, 6
-    make_dictionary_by_category all_words, "City"
+    # make_dictionary_by_category all_words, "City"
     choose_word_from_dictionary @current_dictionary
   end
   

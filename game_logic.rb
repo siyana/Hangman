@@ -8,6 +8,7 @@ class GameLogic
     @choosen_word = word["word"].downcase
     @category = word["category"]
     @pattern = make_pattern_for_word @choosen_word.downcase
+    @guessed_letters = []
     play
   end
   
@@ -18,29 +19,34 @@ class GameLogic
   def play    
     bad_guesses = 0
     loop do
-      puts @pattern
-      if @pattern.include? "_" and bad_guesses >= 6
-        puts "You loose, bro..."
+      if @pattern.include? "_" and bad_guesses >= @choosen_word.length
+        puts "You lose, bro... The word is #{@choosen_word.upcase}."
+        break
       elsif !@pattern.include? "_"
-        puts "You win!"
+        puts "You win! The word is #{@choosen_word.upcase}."
         break
       else
-        puts "Your word's category is: #{@category}. Your alphabeth is : #{@alphabet.join(", ").upcase}."
+        puts "\nYour word's category is: #{@category}. Your alphabeth is : #{@alphabet.join(", ").upcase}."
         guess = make_guess
-        if check_for_letter guess
-          puts "Yeah! You rulz :*"
+        if !@guessed_letters.include? guess
+          @guessed_letters << guess
+          if check_for_letter guess
+            puts "Yeah! You rulz :*"
+          else
+            bad_guesses = bad_guesses + 1
+            puts "Nope..."
+          end
+          @alphabet.delete_if { |i| i == guess }
         else
-          bad_guesses += bad_guesses
-          puts "Nope..."
-        end        
-        @alphabet.delete_if { |i| i == guess }
+          puts "It's not that letter, bro. You've already tried it!"
+        end
       end
     end
   end
   
   def make_guess
     #get user's letter / show alphabet with left letters
-    puts "Make a guess:"
+    puts "Make a guess: #{@pattern}"
     gets.downcase.strip    
   end
   
