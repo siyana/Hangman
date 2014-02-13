@@ -28,12 +28,13 @@ class GameLogic
       else
         puts "\nYour word's category is: #{@category}. Your alphabeth is : #{@alphabet.join(", ").upcase}."
         guess = make_guess
-        if !@guessed_letters.include? guess
+        if !@guessed_letters.include? guess and guess
           @guessed_letters << guess
           if check_for_letter guess
             puts "Yeah! You rulz :*"
           else
-            bad_guesses = bad_guesses + 1
+            bad_guesses = bad_guesses + 1 if /[[:alpha:]]/.match(guess)
+            p bad_guesses
             puts "Nope..."
           end
           @alphabet.delete_if { |i| i == guess }
@@ -47,7 +48,8 @@ class GameLogic
   def make_guess
     #get user's letter / show alphabet with left letters
     puts "Make a guess: #{@pattern}"
-    gets.downcase.strip    
+    guess = gets
+    /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
   end
   
   def check_for_letter(letter)

@@ -7,10 +7,10 @@ class LoadDictionary
   def load_all_words
     #load word_dictionary
     all_words = JSON.parse (IO.read WORD_DICTIONARY)
-    make_dictionary_by_word_length all_words, 6
+    make_dictionary_by_word_length all_words, 15
     # make_dictionary_by_category all_words, "City"
-    #choose_word_from_dictionary @current_dictionary
-    random_word_from_dictionary @current_dictionary
+    choose_word_from_dictionary @current_dictionary
+    #random_word_from_dictionary @current_dictionary
   end
   
   def random_word_from_dictionary(dictionary)
@@ -27,7 +27,7 @@ class LoadDictionary
   
   def show_dictionary(dictionary)
     dictionary.each_with_index do |word, index|
-        puts "#{index + 1}. #{word['word']}"
+      puts "#{index + 1}. #{word['word']}"
     end
   end
   
