@@ -1,0 +1,17 @@
+[
+    {
+        "word":"Varna",
+        "category":"City",
+        "description":"This is description"
+    },
+    {
+       "word":"Gosho",
+        "category":"Name",
+        "description":"This is description"
+    },
+    {
+        "word":"Sofia",
+        "category":"City",
+        "description":"This is description"
+    }
+]
