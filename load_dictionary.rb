@@ -1,16 +1,26 @@
-class LoadDictionary
+module LoadDictionary
   require "json"
   require "./game_logic"
+  extend self
   
   WORD_DICTIONARY = "./words_dictionary.json"
   #@current_dictionary?
   def load_all_words
     #load word_dictionary
-    all_words = JSON.parse (IO.read WORD_DICTIONARY)
-    make_dictionary_by_word_length all_words, 15
+    all_words = JSON.parse(IO.read WORD_DICTIONARY)
+    #make_dictionary_by_word_length all_words, 15
     # make_dictionary_by_category all_words, "City"
-    choose_word_from_dictionary @current_dictionary
+    #choose_word_from_dictionary @current_dictionary
     #random_word_from_dictionary @current_dictionary
+  end
+
+  
+  def get_all_categories
+    load_all_words.map { |word| word["category"]}.uniq
+  end
+  
+  def get_all_word_lengths
+    load_all_words.map { |word| word["word"].length}.uniq
   end
   
   def random_word_from_dictionary(dictionary)
@@ -31,7 +41,7 @@ class LoadDictionary
     end
   end
   
-  def make_dictionary_by_category(words, category)
+  def make_dictionary_by_category(words = load_all_words, category)
     category_dictionary = []
     words.each do |word|
       category_dictionary << word if word["category"] == category
@@ -39,7 +49,7 @@ class LoadDictionary
     @current_dictionary = category_dictionary
   end
   
-  def make_dictionary_by_word_length(words, length)
+  def make_dictionary_by_word_length(words = load_all_words, length)
     #words with length <= length => diff levels
     length_dictionary = []
     words.each do |word|
@@ -49,4 +59,3 @@ class LoadDictionary
   end
 end
 
-LoadDictionary.new.load_all_words
