@@ -51,19 +51,13 @@ module ConsoleMenu
   #choose dictionary methods
   
   def choose_dictionary_by_category
-    puts "Please, choose a dictionary:"
-    all_categories = LoadDictionary.get_all_categories
-    show_options_for_menu all_categories
-    choice = gets.strip.to_i
-    load_words_from_dictionary LoadDictionary.make_dictionary_by_category all_categories[choice - 1]
+    choice = show_dictionary_options_for LoadDictionary.get_all_categories
+    load_words_from_dictionary LoadDictionary.make_dictionary_by_category @all_types[choice - 1]
   end
   
   def choose_dictionary_by_length
-    puts "Please, choose a dictionary:"
-    all_categories = LoadDictionary.get_all_word_lengths
-    show_options_for_menu all_categories
-    choice = gets.strip.to_i
-    load_words_from_dictionary LoadDictionary.make_dictionary_by_word_length all_categories[choice - 1]
+    choice = show_dictionary_options_for LoadDictionary.get_all_word_lengths
+    load_words_from_dictionary LoadDictionary.make_dictionary_by_word_length @all_types[choice - 1]
   end
   
   def load_words_from_dictionary(dictionary)
@@ -79,7 +73,14 @@ module ConsoleMenu
       puts "#{index + 1}. #{option}"
     end
   end
-
+  
+  def show_dictionary_options_for(method)
+      puts "Please, choose a dictionary:"
+      @all_types = method
+      show_options_for_menu @all_types
+      gets.strip.to_i
+  end
+  
 end
 
 ConsoleMenu.show_start_menu
