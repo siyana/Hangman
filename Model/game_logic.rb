@@ -23,6 +23,7 @@ class GameLogic
       return :win
     else
       guess = make_guess
+      @alphabet.delete_if { |i| i == guess }
       if !@guessed_letters.include? guess and guess
         @guessed_letters << guess
         if check_for_letter guess
@@ -31,7 +32,6 @@ class GameLogic
           @bad_guesses = @bad_guesses + 1 if /[[:alpha:]]/.match(guess)
           return :incorrect_letter
         end
-        @alphabet.delete_if { |i| i == guess }
       else
         return :repeated_letter
       end

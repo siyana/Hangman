@@ -1,6 +1,6 @@
 module ConsoleMenu
   extend self
-  require "./load_dictionary"
+  require "./Model/load_dictionary"
   require "./Graphics/drawer"
   
   def show_start_menu
@@ -85,9 +85,9 @@ module ConsoleMenu
   end
   
   def start_game
-    puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
     drawer = Drawer.new
     loop do
+      puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
       puts "Make a guess: #{@game.pattern}"
       result = @game.play
       case result
@@ -103,7 +103,6 @@ module ConsoleMenu
           puts "Nope..."
           drawer.public_send @draw_hangman_phases[@game.bad_guesses - 1]
           puts drawer.render_canvas
-          puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
         when :repeated_letter
           puts "It's not that letter, bro. You've already tried it!"
         else

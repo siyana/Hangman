@@ -1,9 +1,9 @@
 module LoadDictionary
   require "json"
-  require "./game_logic"
+  require_relative "game_logic"
   extend self
   
-  WORD_DICTIONARY = "./words_dictionary.json"
+  WORD_DICTIONARY = "./Model/words_dictionary.json"
 
   def load_all_words
     all_words = JSON.parse(IO.read WORD_DICTIONARY)
