@@ -13,7 +13,7 @@ class GameLogic
   end
   
   def make_pattern_for_word(word)
-    word.tr "a-z", "_"
+    word.tr("a-z", "_")
   end
   
   def play

@@ -76,7 +76,8 @@ module ConsoleMenu
   
   def start_game
     puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
-    
+    drawer = Drawer.new
+    drawer.render_canvas
     loop do
       puts "Make a guess: #{@game.pattern}"
       result = @game.play
