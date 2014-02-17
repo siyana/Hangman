@@ -16,6 +16,16 @@ module ConsoleMenu
   MENU_SCORES = "Scores"
   
   @menu_options = [MENU_AGANST_PC, MENU_MULTYPLAYER, MENU_OPTIONS, MENU_SCORES]
+  @draw_hangman_phases = [:draw_bottom_gibbet_line,
+                          :draw_vertical_gibbet_line,
+                          :draw_top_gibbet_line,
+                          :draw_small_vertical_gibbet_line,
+                          :draw_hangman_head,
+                          :draw_hangman_body,
+                          :draw_hangman_right_arm,
+                          :draw_hangman_left_arm,
+                          :draw_hangman_right_foot,
+                          :draw_hangman_left_foot]
   
   #show menus methods
   
@@ -77,7 +87,6 @@ module ConsoleMenu
   def start_game
     puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
     drawer = Drawer.new
-    drawer.render_canvas
     loop do
       puts "Make a guess: #{@game.pattern}"
       result = @game.play
@@ -91,11 +100,14 @@ module ConsoleMenu
         when :guessed_letter
           puts "Yeah! You rulz :*"
         when :incorrect_letter
+          puts "Nope..."
+          drawer.public_send @draw_hangman_phases[@game.bad_guesses - 1]
+          puts drawer.render_canvas
           puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
         when :repeated_letter
           puts "It's not that letter, bro. You've already tried it!"
         else
-          puts "Nope..."
+        
       end
     end
   end

@@ -1,6 +1,6 @@
 class GameLogic
   
-  attr_reader :choosen_word, :category, :alphabet, :pattern
+  attr_reader :choosen_word, :category, :alphabet, :pattern, :bad_guesses
   
   def initialize(word)
     @alphabet = (10...36).map { |i| i.to_s 36 }
@@ -17,7 +17,7 @@ class GameLogic
   end
   
   def play
-    if @pattern.include? "_" and @bad_guesses >= @choosen_word.length
+    if @pattern.include? "_" and @bad_guesses >= 10
       return :loss
     elsif !@pattern.include? "_"
       return :win
