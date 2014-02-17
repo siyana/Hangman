@@ -20,15 +20,11 @@ module LoadDictionary
   
   def random_word_from_dictionary(dictionary)
     #code
-    #GameLogic.new
     dictionary.sample
   end
   
   def choose_word_from_dictionary(dictionary)
-    show_dictionary dictionary
-    puts "Please, enter number of your word"
-      #are you sure?
-      #GameLogic.new
+    #are you sure?
     dictionary[gets.to_i - 1]
   end
   

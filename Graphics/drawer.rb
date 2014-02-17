@@ -53,6 +53,6 @@ class Drawer
   end
 end
 
-drawer = Drawer.new
-drawer.draw_bottom_gibbet_line
-puts drawer.render_canvas
+#drawer = Drawer.new
+#drawer.draw_bottom_gibbet_line
+#puts drawer.render_canvas

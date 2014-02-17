@@ -1,6 +1,6 @@
 class GameLogic
   
-  attr_reader :choosen_word
+  attr_reader :choosen_word, :category, :alphabet, :pattern
   
   def initialize(word)
     @alphabet = (10...36).map { |i| i.to_s 36 }
@@ -9,45 +9,37 @@ class GameLogic
     @category = word["category"]
     @pattern = make_pattern_for_word @choosen_word.downcase
     @guessed_letters = []
-    play
+    @bad_guesses = 0
   end
   
   def make_pattern_for_word(word)
     word.tr "a-z", "_"
   end
   
-  def play    
-    bad_guesses = 0
-    loop do
-      if @pattern.include? "_" and bad_guesses >= @choosen_word.length
-        puts "You lose, bro... The word is #{@choosen_word.upcase}."
-        break
-      elsif !@pattern.include? "_"
-        puts "You win! The word is #{@choosen_word.upcase}."
-        break
-      else
-        puts "\nYour word's category is: #{@category}. Your alphabeth is : #{@alphabet.join(", ").upcase}."
-        guess = make_guess
-        if !@guessed_letters.include? guess and guess
-          @guessed_letters << guess
-          if check_for_letter guess
-            puts "Yeah! You rulz :*"
-          else
-            bad_guesses = bad_guesses + 1 if /[[:alpha:]]/.match(guess)
-            p bad_guesses
-            puts "Nope..."
-          end
-          @alphabet.delete_if { |i| i == guess }
+  def play
+    if @pattern.include? "_" and @bad_guesses >= @choosen_word.length
+      return :loss
+    elsif !@pattern.include? "_"
+      return :win
+    else
+      guess = make_guess
+      if !@guessed_letters.include? guess and guess
+        @guessed_letters << guess
+        if check_for_letter guess
+          return :guessed_letter
         else
-          puts "It's not that letter, bro. You've already tried it!"
+          @bad_guesses = @bad_guesses + 1 if /[[:alpha:]]/.match(guess)
+          return :incorrect_letter
         end
+        @alphabet.delete_if { |i| i == guess }
+      else
+        return :repeated_letter
       end
     end
   end
   
   def make_guess
     #get user's letter / show alphabet with left letters
-    puts "Make a guess: #{@pattern}"
     guess = gets
     /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
   end

@@ -63,10 +63,40 @@ module ConsoleMenu
   
   def load_words_from_dictionary(dictionary)
     case @initial_choice
-      when 1 then game_choice = LoadDictionary.random_word_from_dictionary dictionary
-      when 2 then game_choice = LoadDictionary.choose_word_from_dictionary dictionary
+      when 1
+        game_choice = LoadDictionary.random_word_from_dictionary dictionary
+      when 2
+        LoadDictionary.show_dictionary dictionary
+        puts "Please, enter number of your word"
+        game_choice = LoadDictionary.choose_word_from_dictionary dictionary
     end
-    GameLogic.new game_choice
+    @game = GameLogic.new game_choice
+    start_game
+  end
+  
+  def start_game
+    puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
+    
+    loop do
+      puts "Make a guess: #{@game.pattern}"
+      result = @game.play
+      case result
+        when :loss
+          puts "You lose, bro... The word is #{@game.choosen_word.upcase}."
+          break
+        when :win
+          puts "You win! The word is #{@game.choosen_word.upcase}."
+          break
+        when :guessed_letter
+          puts "Yeah! You rulz :*"
+        when :incorrect_letter
+          puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
+        when :repeated_letter
+          puts "It's not that letter, bro. You've already tried it!"
+        else
+          puts "Nope..."
+      end
+    end
   end
   
   #help methods
