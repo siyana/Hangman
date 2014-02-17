@@ -4,14 +4,9 @@ module LoadDictionary
   extend self
   
   WORD_DICTIONARY = "./words_dictionary.json"
-  #@current_dictionary?
+
   def load_all_words
-    #load word_dictionary
     all_words = JSON.parse(IO.read WORD_DICTIONARY)
-    #make_dictionary_by_word_length all_words, 15
-    # make_dictionary_by_category all_words, "City"
-    #choose_word_from_dictionary @current_dictionary
-    #random_word_from_dictionary @current_dictionary
   end
 
   
@@ -25,14 +20,16 @@ module LoadDictionary
   
   def random_word_from_dictionary(dictionary)
     #code
-    GameLogic.new dictionary.sample
+    #GameLogic.new
+    dictionary.sample
   end
   
   def choose_word_from_dictionary(dictionary)
-      show_dictionary dictionary
-      puts "Please, enter number of your word"
+    show_dictionary dictionary
+    puts "Please, enter number of your word"
       #are you sure?
-      GameLogic.new dictionary[gets.to_i - 1]
+      #GameLogic.new
+    dictionary[gets.to_i - 1]
   end
   
   def show_dictionary(dictionary)

@@ -37,7 +37,7 @@ module ConsoleMenu
       when 1
        choose_dictionary_by_category
       when 2
-        choose_dictionary_by_length
+       choose_dictionary_by_length
     end
   end
   
@@ -63,9 +63,10 @@ module ConsoleMenu
   
   def load_words_from_dictionary(dictionary)
     case @initial_choice
-      when 1 then LoadDictionary.random_word_from_dictionary dictionary
-      when 2 then LoadDictionary.choose_word_from_dictionary dictionary
+      when 1 then game_choice = LoadDictionary.random_word_from_dictionary dictionary
+      when 2 then game_choice = LoadDictionary.choose_word_from_dictionary dictionary
     end
+    GameLogic.new game_choice
   end
   
   #help methods
@@ -76,10 +77,10 @@ module ConsoleMenu
   end
   
   def show_dictionary_options_for(method)
-      puts "Please, choose a dictionary:"
-      @all_types = method
-      show_options_for_menu @all_types
-      gets.strip.to_i
+    puts "Please, choose a dictionary:"
+    @all_types = method
+    show_options_for_menu @all_types
+    gets.strip.to_i
   end
   
 end

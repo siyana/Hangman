@@ -52,3 +52,7 @@ class Drawer
     @canvas.render_as(Graphics::Renderers::Ascii)
   end
 end
+
+drawer = Drawer.new
+drawer.draw_bottom_gibbet_line
+puts drawer.render_canvas
