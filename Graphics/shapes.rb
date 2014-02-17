@@ -13,7 +13,7 @@ module Shapes
   end
     
   class Line
-    require "./brezenham_rasterization"
+    require_relative "brezenham_rasterization"
     attr_reader :from, :to
         
     def initialize(from,to)

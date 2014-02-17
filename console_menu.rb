@@ -1,6 +1,7 @@
 module ConsoleMenu
   extend self
   require "./load_dictionary"
+  require "./Graphics/drawer"
   
   def show_start_menu
     show_options_for_menu @menu_options
