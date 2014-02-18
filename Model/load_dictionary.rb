@@ -4,11 +4,11 @@ module LoadDictionary
   extend self
   
   WORD_DICTIONARY = "./Model/words_dictionary.json"
-
+  
+  #dictionary methods
   def load_all_words
-    all_words = JSON.parse(IO.read WORD_DICTIONARY)
+    JSON.parse(IO.read WORD_DICTIONARY)
   end
-
   
   def get_all_categories
     load_all_words.map { |word| word["category"]}.uniq
@@ -49,6 +49,29 @@ module LoadDictionary
       length_dictionary << word if word["word"].length <= length
     end
     @current_dictionary = length_dictionary
+  end
+  
+  #word methods
+  def add_word(word)
+    all_words = Array.new(load_all_words)
+    #ako q ima da ne dobavq
+    delete_repeated_or_choosen all_words, word
+    all_words << word
+    File.open(WORD_DICTIONARY,"w") do |f|
+      f.write(JSON.pretty_generate(all_words))
+    end
+  end
+  
+  def delete_word(word)
+    all_words = Array.new(load_all_words)
+    delete_repeated_or_choosen all_words, word
+    File.open(WORD_DICTIONARY,"w") do |f|
+      f.write(JSON.pretty_generate(all_words))
+    end
+  end
+  
+  def delete_repeated_or_choosen(all_words,word)
+    all_words.delete_if { |current_word| current_word == word}
   end
 end
 

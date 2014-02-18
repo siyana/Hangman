@@ -4,8 +4,8 @@ module ConsoleMenu
   require "./Graphics/drawer"
   
   def show_start_menu
-    show_options_for_menu @menu_options
-    get_users_choice_for_menu
+    show_options_for_menu @main_menu_options
+    get_users_choice_for_main_menu
   end
   
   private
@@ -15,7 +15,15 @@ module ConsoleMenu
   MENU_OPTIONS = "Options"
   MENU_SCORES = "Scores"
   
-  @menu_options = [MENU_AGANST_PC, MENU_MULTYPLAYER, MENU_OPTIONS, MENU_SCORES]
+  @main_menu_options = [MENU_AGANST_PC, MENU_MULTYPLAYER, MENU_OPTIONS, MENU_SCORES]
+  
+  OPTIONS_ADD_WORD = "Add word"
+  OPTIONS_DELETE_WORD = "Delete word"
+  OPTION_ADD_PLAYER = "Add player"
+  OPTION_DELETE_PLAYER = "Delete player"
+  
+  @option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER]
+  
   @draw_hangman_phases = [:draw_bottom_gibbet_line,
                           :draw_vertical_gibbet_line,
                           :draw_top_gibbet_line,
@@ -28,16 +36,6 @@ module ConsoleMenu
                           :draw_hangman_left_foot]
   
   #show menus methods
-  
-  def get_users_choice_for_menu
-      puts "Please, enter the number of your choice:"
-      @initial_choice = gets.strip.to_i
-      case @initial_choice
-          when 1, 2 then choose_dictionary
-          when 3 then show_options_menu
-          when 4 then show_scores
-      end
-  end
   
   def choose_dictionary
     puts "Do you wanna see categories or word's length? Enter your choice:"
@@ -52,7 +50,9 @@ module ConsoleMenu
   end
   
   def show_options_menu
-    p "3"
+    puts "Option menu:"
+    show_options_for_menu @option_menu_options
+    get_users_choice_for_option_menu
   end
   
   def show_scores
@@ -125,6 +125,59 @@ module ConsoleMenu
     gets.strip.to_i
   end
   
+  def get_users_choice_for_option_menu
+    puts "Please, enter the number of your choice:"
+    choice = gets.strip.to_i
+    case choice
+    when 1
+      #add_word_method in LoadDict
+      add_word
+    when 2
+      #delete_word_method in LoadDict
+      delete_word
+    when 3
+      #add_player method in PlayersManager
+    when 4
+      #delete_player method in PlayersManager
+    end
+  end
+  
+  def get_users_choice_for_main_menu
+      puts "Please, enter the number of your choice:"
+      @initial_choice = gets.strip.to_i
+      case @initial_choice
+          when 1, 2 then choose_dictionary
+          when 3 then show_options_menu
+          when 4 then show_scores
+      end
+  end
+  
+  #option menu methods
+  def add_word
+    puts "Your word is:"
+    word = gets.strip
+    puts "Category of your word is:"
+    category = gets.strip
+    puts "Word description (optionaly):"
+    word_description = gets.strip
+    if LoadDictionary.add_word({"word" => word.capitalize, "category" => category.capitalize, "description" => word_description.capitalize})
+      puts "Your word is succesfully added!"
+    else
+      puts "There's an error in adding word :/"
+    end
+  end
+  
+  def delete_word
+    words = LoadDictionary.load_all_words
+    words.each_with_index {|word,index| puts "#{index + 1}. #{word["word"]}"}
+    puts "Type number of word you want to delete:"
+    choice = gets.strip.to_i
+    if LoadDictionary.delete_word words[choice-1]
+      puts "The word is succesfully deleted!"
+    else
+      puts "There is an error in deleting word :/"
+    end
+  end
 end
 
 ConsoleMenu.show_start_menu

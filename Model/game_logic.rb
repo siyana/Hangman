@@ -29,7 +29,7 @@ class GameLogic
         if check_for_letter guess
           return :guessed_letter
         else
-          @bad_guesses = @bad_guesses + 1 if /[[:alpha:]]/.match(guess)
+          @bad_guesses = @bad_guesses + 1 #if /[[:alpha:]]/.match(guess)
           return :incorrect_letter
         end
       else
