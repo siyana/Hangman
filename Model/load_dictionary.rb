@@ -10,12 +10,18 @@ module LoadDictionary
     JSON.parse(IO.read WORD_DICTIONARY)
   end
   
+  def write_to_json(records)
+    File.open(PLAYERS_INFO,"w") do |f|
+      f.write(JSON.pretty_generate(records))
+    end
+  end
+  
   def get_all_categories
     load_all_words.map { |word| word["category"]}.uniq
   end
   
   def get_all_word_lengths
-    load_all_words.map { |word| word["word"].length}.uniq
+    load_all_words.map { |word| word["word"].length}.uniq.sort
   end
   
   def random_word_from_dictionary(dictionary)
@@ -46,28 +52,24 @@ module LoadDictionary
     #words with length <= length => diff levels
     length_dictionary = []
     words.each do |word|
-      length_dictionary << word if word["word"].length <= length
+      length_dictionary << word if word["word"].length == length
     end
     @current_dictionary = length_dictionary
   end
   
   #word methods
   def add_word(word)
-    all_words = Array.new(load_all_words)
-    #ako q ima da ne dobavq
+    all_words = load_all_words
+    #ako q ima da ne dobavq, da izpisva syobshtenie
     delete_repeated_or_choosen all_words, word
     all_words << word
-    File.open(WORD_DICTIONARY,"w") do |f|
-      f.write(JSON.pretty_generate(all_words))
-    end
+    write_to_json all_words
   end
   
   def delete_word(word)
-    all_words = Array.new(load_all_words)
+    all_words = load_all_words
     delete_repeated_or_choosen all_words, word
-    File.open(WORD_DICTIONARY,"w") do |f|
-      f.write(JSON.pretty_generate(all_words))
-    end
+    write_to_json all_words
   end
   
   def delete_repeated_or_choosen(all_words,word)

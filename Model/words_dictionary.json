@@ -23,5 +23,15 @@
     "word": "Ventsi",
     "category": "Name",
     "description": "Nope"
+  },
+  {
+    "word": "Computer",
+    "category": "Object",
+    "description": ""
+  },
+  {
+    "word": "Bulgaria",
+    "category": "Country",
+    "description": ""
   }
 ]

@@ -1,6 +1,7 @@
 module ConsoleMenu
   extend self
   require "./Model/load_dictionary"
+  require "./Model/load_players_list"
   require "./Graphics/drawer"
   
   def show_start_menu
@@ -56,7 +57,9 @@ module ConsoleMenu
   end
   
   def show_scores
-    p "4"
+    #sort scores
+    all_players = LoadPlayers.load_all_players
+    all_players.map { |player| puts "#{player['player_name']}   #{player['player_score']}"}
   end
   
   #choose dictionary methods
@@ -137,8 +140,10 @@ module ConsoleMenu
       delete_word
     when 3
       #add_player method in PlayersManager
+      add_player
     when 4
       #delete_player method in PlayersManager
+      delete_player
     end
   end
   
@@ -169,13 +174,39 @@ module ConsoleMenu
   
   def delete_word
     words = LoadDictionary.load_all_words
-    words.each_with_index {|word,index| puts "#{index + 1}. #{word["word"]}"}
+    words.each_with_index {|word,index| puts "#{index + 1}. #{word['word']}"}
     puts "Type number of word you want to delete:"
     choice = gets.strip.to_i
     if LoadDictionary.delete_word words[choice-1]
       puts "The word is succesfully deleted!"
     else
       puts "There is an error in deleting word :/"
+    end
+  end
+  
+  def add_player
+    puts "Enter the name of your player:"
+    player = gets.strip
+    result = LoadPlayers.add_player({"player_name" => player.capitalize, "player_score" => "0"})
+    if result == :succesfully_added
+      puts "Your player is added correctly."
+    elsif result == :duplicated_name
+      puts "Enter new name. This is already taken:"
+      add_player
+    else
+      puts "There is an error in adding player."
+    end
+  end
+  
+  def delete_player
+    players = LoadPlayers.load_all_players
+    players.each_with_index {|player,index| puts "#{index + 1}. #{player['player_name']}"}
+    puts "Type number of player you want to delete:"
+    choice = gets.strip.to_i
+    if LoadPlayers.delete_player players[choice-1]
+      puts "The player is succesfully deleted!"
+    else
+      puts "There is an error in deleting player :/"
     end
   end
 end
