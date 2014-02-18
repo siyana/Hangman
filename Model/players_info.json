@@ -1,26 +1,22 @@
 [
   {
     "player_name": "Gosho",
-    "player_score": "100"
+    "player_score": 12
   },
   {
     "player_name": "Pesho",
-    "player_score": "50"
-  },
-  {
-    "player_name": "Genadi",
-    "player_score": "0"
-  },
-  {
-    "player_name": "Sis",
-    "player_score": "0"
+    "player_score": 1
   },
   {
     "player_name": "Nataliya",
-    "player_score": "0"
+    "player_score": 1
   },
   {
-    "player_name": "Ivan",
-    "player_score": "0"
+    "player_name": "Genadi",
+    "player_score": 2
+  },
+  {
+    "player_name": "Sis",
+    "player_score": 4
   }
 ]

@@ -7,9 +7,10 @@ module ConsoleMenu
   def choose_player
     puts "Please, choose player:"
     all_players = LoadPlayers.load_all_players
-    show_options_for_menu all_players
-    @player = all_players[gets.strip.to_i - 1]
-    p @player
+    all_players.each_with_index { |player, index| puts "#{index + 1}. #{player['player_name']}"}
+    puts "Enter choosen player number:"
+    @player_index = gets.strip.to_i - 1
+    show_start_menu
   end
   
   def show_start_menu
@@ -107,6 +108,7 @@ module ConsoleMenu
           break
         when :win
           puts "You win! The word is #{@game.choosen_word.upcase}."
+          LoadPlayers.update_user_score @player_index
           break
         when :guessed_letter
           puts "Yeah! You rulz :*"
@@ -218,5 +220,5 @@ module ConsoleMenu
     end
   end
 end
-
-ConsoleMenu.show_start_menu
+ConsoleMenu.choose_player
+#ConsoleMenu.show_start_menu
