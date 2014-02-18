@@ -12,30 +12,33 @@ class GameLogic
     @bad_guesses = 0
   end
   
-  def make_pattern_for_word(word)
-    word.tr("a-z", "_")
-  end
-  
   def play
     if @pattern.include? "_" and @bad_guesses >= 10
       return :loss
     elsif !@pattern.include? "_"
       return :win
     else
-      guess = make_guess
-      @alphabet.delete_if { |i| i == guess }
-      if !@guessed_letters.include? guess and guess
-        @guessed_letters << guess
-        if check_for_letter guess
-          return :guessed_letter
-        else
-          @bad_guesses = @bad_guesses + 1 #if /[[:alpha:]]/.match(guess)
-          return :incorrect_letter
-        end
-      else
-        return :repeated_letter
-      end
+      game_continue
     end
+  end
+  
+  private
+  
+  def game_continue
+    guess = make_guess
+    @alphabet.delete_if { |i| i == guess }
+    if !@guessed_letters.include? guess and guess
+      @guessed_letters << guess
+      return :guessed_letter if check_for_letter guess
+      @bad_guesses = @bad_guesses + 1 #if /[[:alpha:]]/.match(guess)
+      return :incorrect_letter
+    else
+      return :repeated_letter
+    end
+  end
+  
+  def make_pattern_for_word(word)
+      word.tr("a-z", "_")
   end
   
   def make_guess

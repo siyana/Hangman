@@ -10,12 +10,6 @@ module LoadDictionary
     JSON.parse(IO.read WORD_DICTIONARY)
   end
   
-  def write_to_json(records)
-    File.open(PLAYERS_INFO,"w") do |f|
-      f.write(JSON.pretty_generate(records))
-    end
-  end
-  
   def get_all_categories
     load_all_words.map { |word| word["category"]}.uniq
   end
@@ -25,12 +19,10 @@ module LoadDictionary
   end
   
   def random_word_from_dictionary(dictionary)
-    #code
     dictionary.sample
   end
   
   def choose_word_from_dictionary(dictionary)
-    #are you sure?
     dictionary[gets.to_i - 1]
   end
   
@@ -49,7 +41,6 @@ module LoadDictionary
   end
   
   def make_dictionary_by_word_length(words = load_all_words, length)
-    #words with length <= length => diff levels
     length_dictionary = []
     words.each do |word|
       length_dictionary << word if word["word"].length == length
@@ -72,8 +63,17 @@ module LoadDictionary
     write_to_json all_words
   end
   
+  private
+  
+  def write_to_json(records)
+    File.open(WORD_DICTIONARY,"w") do |f|
+      f.write(JSON.pretty_generate(records))
+    end
+  end
+  
   def delete_repeated_or_choosen(all_words,word)
     all_words.delete_if { |current_word| current_word == word}
   end
+  
 end
 
