@@ -4,6 +4,14 @@ module ConsoleMenu
   require "./Model/load_players_list"
   require "./Graphics/drawer"
   
+  def choose_player
+    puts "Please, choose player:"
+    all_players = LoadPlayers.load_all_players
+    show_options_for_menu all_players
+    @player = all_players[gets.strip.to_i - 1]
+    p @player
+  end
+  
   def show_start_menu
     show_options_for_menu @main_menu_options
     get_users_choice_for_main_menu
