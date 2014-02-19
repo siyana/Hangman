@@ -1,7 +1,7 @@
 require_relative "spec_helper.rb"
 
 describe GameLogic do
-  before :each do
+  before :all do
     @game = GameLogic.new word: "Varna", category: "City"
   end
   
@@ -12,12 +12,8 @@ describe GameLogic do
   end
   
   describe "#make_pattern_for_word" do
-    if "should make pattern for initialized word with '_'"
-        #pattern = @game.make_pattern_for_word "Varna"
-        
-        @game = GameLogic.new word: "Varna", category: "City"
-        pattern = make_pattern_for_word "Varna"
-        pattern.should eq "_____"
+    it "should make pattern for initialized word with " do
+      @game.pattern.should eq "_____"
     end
   end
 end
