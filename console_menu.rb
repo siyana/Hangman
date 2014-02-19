@@ -4,12 +4,8 @@ module ConsoleMenu
   require "./Model/load_players_list"
   require "./Graphics/drawer"
   
-  def choose_player
-    puts "Please, choose player:"
-    all_players = LoadPlayers.load_all_players
-    all_players.each_with_index { |player, index| puts "#{index + 1}. #{player['player_name']}"}
-    puts "Enter choosen player number:"
-    @player_index = gets.strip.to_i - 1
+  def start
+    @player_index = choose_player
     show_start_menu
   end
   
@@ -21,7 +17,7 @@ module ConsoleMenu
   private
   
   MENU_AGANST_PC = "Against PC"
-  MENU_MULTYPLAYER = "Multyplayer"
+  MENU_MULTYPLAYER = "Multiplayer"
   MENU_OPTIONS = "Options"
   MENU_SCORES = "Scores"
   
@@ -52,10 +48,8 @@ module ConsoleMenu
     show_options_for_menu ["By category", "By length"]
     choice = gets.strip.to_i
     case choice
-      when 1
-       choose_dictionary_by_category
-      when 2
-       choose_dictionary_by_length
+      when 1 then choose_dictionary_by_category
+      when 2 then choose_dictionary_by_length
     end
   end
   
@@ -108,7 +102,7 @@ module ConsoleMenu
           break
         when :win
           puts "You win! The word is #{@game.choosen_word.upcase}."
-          LoadPlayers.update_user_score @player_index
+          @opponent_index.nil? ? LoadPlayers.update_user_score(@player_index) : LoadPlayers.update_user_score(@opponent_index)
           break
         when :guessed_letter
           puts "Yeah! You rulz :*"
@@ -118,7 +112,7 @@ module ConsoleMenu
           puts drawer.render_canvas
         when :repeated_letter
           puts "It's not that letter, bro. You've already tried it!"
-        else
+          #else
         
       end
     end
@@ -158,13 +152,28 @@ module ConsoleMenu
   end
   
   def get_users_choice_for_main_menu
-      puts "Please, enter the number of your choice:"
-      @initial_choice = gets.strip.to_i
-      case @initial_choice
-          when 1, 2 then choose_dictionary
-          when 3 then show_options_menu
-          when 4 then show_scores
-      end
+    puts "Please, enter the number of your choice:"
+    @initial_choice = gets.strip.to_i
+    case @initial_choice
+      when 1 then choose_dictionary
+      when 2 then choose_opponent
+      when 3 then show_options_menu
+      when 4 then show_scores
+    end
+  end
+  
+  #player methods
+  def choose_player
+    puts "Please, choose player:"
+    all_players = LoadPlayers.load_all_players
+    all_players.each_with_index { |player, index| puts "#{index + 1}. #{player['player_name']}"}
+    puts "Enter choosen player number:"
+    gets.strip.to_i - 1
+  end
+  
+  def choose_opponent
+    @opponent_index = choose_player
+    choose_dictionary
   end
   
   #option menu methods
@@ -220,5 +229,4 @@ module ConsoleMenu
     end
   end
 end
-ConsoleMenu.choose_player
-#ConsoleMenu.show_start_menu
+ConsoleMenu.start
