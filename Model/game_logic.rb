@@ -2,11 +2,11 @@ class GameLogic
   
   attr_reader :choosen_word, :category, :alphabet, :pattern, :bad_guesses
   
-  def initialize(word)
+  def initialize(word: nil,category: nil,description: nil)
     @alphabet = (10...36).map { |i| i.to_s 36 }
     #load word from file
-    @choosen_word = word["word"].downcase
-    @category = word["category"]
+    @choosen_word = word.downcase
+    @category = category
     @pattern = make_pattern_for_word @choosen_word.downcase
     @guessed_letters = []
     @bad_guesses = 0

@@ -1,0 +1,1 @@
+require_relative "../Model/game_logic.rb"

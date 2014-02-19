@@ -86,7 +86,7 @@ module ConsoleMenu
         puts "Please, enter number of your word"
         game_choice = LoadDictionary.choose_word_from_dictionary dictionary
     end
-    @game = GameLogic.new game_choice
+    @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
     start_game
   end
   
