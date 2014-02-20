@@ -12,20 +12,22 @@ class GameLogic
     @bad_guesses = 0
   end
   
-  def play
+  def play(guess)    
     if @pattern.include? "_" and @bad_guesses >= 10
       return :loss
     elsif !@pattern.include? "_"
       return :win
     else
-      game_continue
+      game_continue(guess)
+      
     end
   end
   
   private
   
-  def game_continue
-    guess = make_guess
+  def game_continue(guess)
+    #guess = make_guess
+    /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
     @alphabet.delete_if { |i| i == guess }
     if !@guessed_letters.include? guess and guess
       @guessed_letters << guess
@@ -41,11 +43,11 @@ class GameLogic
       word.tr("a-z", "_")
   end
   
-  def make_guess
-    #get user's letter / show alphabet with left letters
-    guess = gets
-    /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
-  end
+  # def make_guess
+  #   #get user's letter / show alphabet with left letters
+  #   guess = gets
+  #   /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
+  # end
   
   def check_for_letter(letter)
     #check if choosen word contains letter

@@ -93,9 +93,10 @@ module ConsoleMenu
   def start_game
     drawer = Drawer.new
     loop do
-      puts "\nYour word's category is: #{@game.category}. Your alphabeth is : #{@game.alphabet.join(", ").upcase}."
+      puts "\nYour word's category is: #{@game.category}. Your alphabet is : #{@game.alphabet.join(", ").upcase}."
       puts "Make a guess: #{@game.pattern}"
-      result = @game.play
+      guess = gets.strip
+      result = @game.play(guess)
       case result
         when :loss
           puts "You lose, bro... The word is #{@game.choosen_word.upcase}."
@@ -112,7 +113,7 @@ module ConsoleMenu
           puts drawer.render_canvas
         when :repeated_letter
           puts "It's not that letter, bro. You've already tried it!"
-          #else
+        else
         
       end
     end
