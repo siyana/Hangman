@@ -22,14 +22,8 @@ module LoadDictionary
     dictionary.sample
   end
   
-  def choose_word_from_dictionary(dictionary)
-    dictionary[gets.to_i - 1]
-  end
-  
-  def show_dictionary(dictionary)
-    dictionary.each_with_index do |word, index|
-      puts "#{index + 1}. #{word['word']}"
-    end
+  def choose_word_from_dictionary(dictionary, choice)
+    dictionary[choice]
   end
   
   def make_dictionary_by_category(words = load_all_words, category)
@@ -58,6 +52,7 @@ module LoadDictionary
   end
   
   def delete_word(word)
+      # dont delete word which is not contained
     all_words = load_all_words
     delete_repeated_or_choosen all_words, word
     write_to_json all_words

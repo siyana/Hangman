@@ -82,9 +82,10 @@ module ConsoleMenu
       when 1
         game_choice = LoadDictionary.random_word_from_dictionary dictionary
       when 2
-        LoadDictionary.show_dictionary dictionary
+        show_dictionary dictionary
         puts "Please, enter number of your word"
-        game_choice = LoadDictionary.choose_word_from_dictionary dictionary
+        choice = gets.to_i - 1
+        game_choice = LoadDictionary.choose_word_from_dictionary dictionary, choice
     end
     @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
     start_game
@@ -103,7 +104,7 @@ module ConsoleMenu
           break
         when :win
           puts "You win! The word is #{@game.choosen_word.upcase}."
-          @opponent_index.nil? ? LoadPlayers.update_user_score(@player_index) : LoadPlayers.update_user_score(@opponent_index)
+          @opponent_index.nil? ? LoadPlayers.update_player_score(@player_index) : LoadPlayers.update_player_score(@opponent_index)
           break
         when :guessed_letter
           puts "Yeah! You rulz :*"
@@ -113,6 +114,8 @@ module ConsoleMenu
           puts drawer.render_canvas
         when :repeated_letter
           puts "It's not that letter, bro. You've already tried it!"
+        when :not_a_letter
+          "Please, enter a letter"
         else
         
       end
@@ -120,6 +123,12 @@ module ConsoleMenu
   end
   
   #help methods
+  
+  def show_dictionary(dictionary)
+      dictionary.each_with_index do |word, index|
+          puts "#{index + 1}. #{word['word']}"
+      end
+  end
   def show_options_for_menu(menu)
     menu.each_with_index do |option, index|
       puts "#{index + 1}. #{option}"

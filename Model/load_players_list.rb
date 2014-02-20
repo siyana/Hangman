@@ -22,7 +22,7 @@ module LoadPlayers
     write_to_json all_players
   end
   
-  def update_user_score(player_index)
+  def update_player_score(player_index)
     all_players = load_all_players
     player = all_players[player_index]
     player["player_score"] += 1
