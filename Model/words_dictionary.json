@@ -15,11 +15,6 @@
     "description": "This is description"
   },
   {
-    "word": "Ventsi",
-    "category": "Name",
-    "description": "Nope"
-  },
-  {
     "word": "Computer",
     "category": "Object",
     "description": ""
@@ -32,6 +27,11 @@
   {
     "word": "Plovdiv",
     "category": "City",
+    "description": ""
+  },
+  {
+    "word": "Word",
+    "category": "Test",
     "description": ""
   }
 ]

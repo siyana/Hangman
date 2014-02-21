@@ -1,15 +1,7 @@
 [
   {
     "player_name": "Gosho",
-    "player_score": 157
-  },
-  {
-    "player_name": "Pesho",
-    "player_score": 6
-  },
-  {
-    "player_name": "Nataliya",
-    "player_score": 5
+    "player_score": 158
   },
   {
     "player_name": "Genadi",
@@ -18,5 +10,9 @@
   {
     "player_name": "Sis",
     "player_score": 6
+  },
+  {
+    "player_name": "A",
+    "player_score": 0
   }
 ]
