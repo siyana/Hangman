@@ -155,24 +155,32 @@ describe Graphics do
         
         #add hash to shapes and eql
         it "should return correct from point" do
-            
+          @line.from.should eq Shapes::Point.new(0,0)
         end
         
         it "should return correct from point with swapped ends" do
-          
+          swapped_line = Shapes::Line.new(Shapes::Point.new(0, 3), Shapes::Point.new(0, 0))
+          swapped_line.from.should eq Shapes::Point.new(0,0)
         end
         
         it "should return correct to point" do
-         
+         @line.to.should eq Shapes::Point.new(0,3)
         end
         
         it "should return correct to point with swapped ends" do
-          
+          swapped_line = Shapes::Line.new(Shapes::Point.new(0, 3), Shapes::Point.new(0, 0))
+          swapped_line.to.should eq Shapes::Point.new(0,3)
         end
       end
       
       describe Shapes::Rectangle do
+        before :each do
+          @rectangle = Shapes::Rectangle.new(Shapes::Point.new(0, 0), Shapes::Point.new(1, 1))
+        end
         
+        it "should be instance of Line" do
+          @rectangle.should be_instance_of Shapes::Rectangle
+        end
       end
    end
     
