@@ -28,7 +28,7 @@ module LoadDictionary
 
   def make_dictionary_by_category(words = load_all_words, category)
     category_dictionary = []
-    words.each do |word|
+    words.select do |word|
       category_dictionary << word if word["category"] == category
     end
     @current_dictionary = category_dictionary
@@ -36,7 +36,7 @@ module LoadDictionary
 
   def make_dictionary_by_word_length(words = load_all_words, length)
     length_dictionary = []
-    words.each do |word|
+    words.select do |word|
       length_dictionary << word if word["word"].length == length
     end
     @current_dictionary = length_dictionary
@@ -53,7 +53,6 @@ module LoadDictionary
   end
 
   def delete_word(word)
-      # dont delete word which is not contained
     all_words = load_all_words
     delete_repeated_or_choosen all_words, word
     write_to_json all_words

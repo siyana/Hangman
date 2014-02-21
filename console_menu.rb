@@ -55,6 +55,9 @@ module ConsoleMenu
       case choice
         when 1 then choose_dictionary_by_category
         when 2 then choose_dictionary_by_length
+        else
+          puts "Please, enter valid choice!"
+          choose_dictionary
       end
     end
   end
@@ -121,8 +124,7 @@ module ConsoleMenu
         when :repeated_letter
           puts "It's not that letter, bro. You've already tried it!"
         when :not_a_letter
-          "Please, enter a letter"
-        else
+          puts "Please, enter a letter"
       end
     end
   end
@@ -144,7 +146,12 @@ module ConsoleMenu
     puts "Please, choose a dictionary:"
     @all_types = method
     show_options_for_menu @all_types
-    gets.strip.to_i
+    choice = gets.strip.to_i
+    unless choice < @all_types.length and choice >= 0
+      puts "Please, enter valid dictionary number next time! Now you will get random dictionary."
+      choice = 0
+    end
+    choice
   end
 
   def get_users_choice_for_option_menu

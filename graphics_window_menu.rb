@@ -188,6 +188,8 @@ class GraphicsWindowMenu
           @app.alert "Nope... You have #{10 - @game.bad_guesses} attempts remaining "
         when :repeated_letter
           @app.alert "It's not that letter, bro. You've already tried it!"
+        when :not_a_letter
+          puts "Please, enter a letter"
       end
       show_alphabet
       show_pattern

@@ -29,30 +29,29 @@ class GameLogic
   private
 
   def game_continue(guess)
-      guess = /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
-      @alphabet.delete_if { |i| i == guess }
-      if !@guessed_letters.include? guess and guess
-        @guessed_letters << guess
-        return :guessed_letter if check_for_letter guess
-        @bad_guesses = @bad_guesses + 1
-        return :incorrect_letter
-      elsif !guess
-        return :not_a_letter
-      else
-        return :repeated_letter
-      end
+    guess = /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
+    @alphabet.delete_if { |i| i == guess }
+    if !@guessed_letters.include? guess and guess
+      @guessed_letters << guess
+      return :guessed_letter if check_for_letter guess
+      @bad_guesses = @bad_guesses + 1
+      return :incorrect_letter
+    elsif !guess
+      return :not_a_letter
+    else
+      return :repeated_letter
+    end
   end
 
   def make_pattern_for_word(word)
-      word.tr("a-z", PATTERN_SYMBOL)
+    word.tr("a-z", PATTERN_SYMBOL)
   end
 
   def check_for_letter(letter)
-      #check if choosen word contains letter
-      if @choosen_word.include? letter
-          @choosen_word = @choosen_word.gsub letter, letter.upcase
-          @pattern = make_pattern_for_word @choosen_word
-      end
+    if @choosen_word.include? letter
+      @choosen_word = @choosen_word.gsub letter, letter.upcase
+      @pattern = make_pattern_for_word @choosen_word
+    end
   end
 
 end
