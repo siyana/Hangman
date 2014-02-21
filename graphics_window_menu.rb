@@ -14,31 +14,31 @@ class GraphicsWindowMenu
   end
 
   def show_start_menu
-    @app.flow do 
+    @app.flow do
     	@main_menu_buttons = @main_menu_options.map do |option|
           				           @app.button "#{option}"
         					         end
     end
   	get_users_choice_for_main_menu
-  end   
+  end
 
   private
 
   MENU_AGANST_PC = "Against PC"
   MENU_MULTIPLAYER = "Multiplayer"
   MENU_OPTIONS = "Options"
-  MENU_SCORES = "Scores" 
+  MENU_SCORES = "Scores"
 
   #help methods
 
   def get_users_choice_for_main_menu
     @main_menu_buttons[0].click do
       @initial_choice = MENU_AGANST_PC
-      choose_dictionary 
+      choose_dictionary
     end
     @main_menu_buttons[1].click do
       @initial_choice = MENU_MULTIPLAYER
-      choose_opponent 
+      choose_opponent
     end
     @main_menu_buttons[2].click do
       @initial_choice = MENU_OPTIONS
@@ -46,7 +46,7 @@ class GraphicsWindowMenu
     end
     @main_menu_buttons[3].click do
       @initial_choice = MENU_SCORES
-      show_scores 
+      show_scores
     end
   end
 
@@ -76,30 +76,30 @@ class GraphicsWindowMenu
     paragraph = @app.para "Please, choose player:"
     all_players = LoadPlayers.load_all_players
     list = @app.list_box items:all_players.map { |player| player["player_name"] }
-    button = @app.button "Choose" do 
+    button = @app.button "Choose" do
       all_players.each_with_index { |player, index| @player_index = index if player["player_name"] == list.text() }
       paragraph.clear()
       list.clear()
       button.clear()
       show_start_menu
-    end   
+    end
   end
-  
+
   def choose_opponent
     paragraph = @app.para "Please, choose opponent:"
     all_players = LoadPlayers.load_all_players
     players_names = all_players.select { |player,index| player["player_name"] != all_players[@player_index]["player_name"] }
     list = @app.list_box items:players_names.map { |player| player["player_name"]}
-    button = @app.button "Choose" do 
+    button = @app.button "Choose" do
       all_players.each_with_index { |player, index| @opponent_index = index if player["player_name"] == list.text() }
       paragraph.clear()
       list.clear()
       button.clear()
       choose_dictionary
-    end   
+    end
   end
   #choose dictionary methods
-  
+
   def choose_dictionary_by_category
     @app.para "Please, choose a dictionary:"
     all_types = LoadDictionary.get_all_categories
@@ -107,7 +107,7 @@ class GraphicsWindowMenu
       @app.button "#{option}" do load_words_from_dictionary LoadDictionary.make_dictionary_by_category option end
     end
   end
-  
+
   def choose_dictionary_by_length
     @app.para "Please, choose a dictionary:"
     all_types = LoadDictionary.get_all_word_lengths
@@ -115,23 +115,23 @@ class GraphicsWindowMenu
       @app.button "#{option}" do load_words_from_dictionary LoadDictionary.make_dictionary_by_word_length option end
     end
   end
-  
+
   def load_words_from_dictionary(dictionary)
     case @initial_choice
       when MENU_AGANST_PC
         game_choice = LoadDictionary.random_word_from_dictionary dictionary
         @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
-        start_game(@game, @player_index, @opponent_index)        
-      when MENU_MULTIPLAYER        
+        start_game(@game, @player_index, @opponent_index)
+      when MENU_MULTIPLAYER
         @app.para "Please, choose a word"
         dictionary.each_with_index do |word, index|
-          @app.button "#{word['word']}" do 
-            game_choice = LoadDictionary.choose_word_from_dictionary dictionary, index 
+          @app.button "#{word['word']}" do
+            game_choice = LoadDictionary.choose_word_from_dictionary dictionary, index
             @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
             start_game(@game, @player_index, @opponent_index)
           end
-        end  
-    end    
+        end
+    end
   end
 
   def start_game(game, player_index, opponent_index)
@@ -149,7 +149,7 @@ class GraphicsWindowMenu
       @opponent_index = opponent_index
       start_game
     end
-    
+
     def start_game
       @text_field = @app.edit_line
       @make_guess_button = @app.button "Make guess"
@@ -164,7 +164,7 @@ class GraphicsWindowMenu
     end
 
     def show_pattern
-      @current_pattern.clear() unless @current_pattern.nil? 
+      @current_pattern.clear() unless @current_pattern.nil?
       @current_pattern = @app.caption "Make a guess: #{@game.pattern}"
     end
 
@@ -187,7 +187,7 @@ class GraphicsWindowMenu
         when :incorrect_letter
           @app.alert "Nope... You have #{10 - @game.bad_guesses} attempts remaining "
         when :repeated_letter
-          @app.alert "It's not that letter, bro. You've already tried it!"           
+          @app.alert "It's not that letter, bro. You've already tried it!"
       end
       show_alphabet
       show_pattern
@@ -205,9 +205,9 @@ class GraphicsWindowMenu
       @option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER]
       show_options_menu
     end
-    
+
     def show_options_menu
-      @app.stack do        
+      @app.stack do
         @option_menu_options.map do |option|
           @app.button "#{option}" do
             case option
@@ -220,9 +220,9 @@ class GraphicsWindowMenu
         end
       end
     end
-    
+
     private
-    
+
     def add_player
       Shoes.app title: "Add player:", width: 300, height: 100 do
         para "Player name:"
@@ -261,7 +261,7 @@ class GraphicsWindowMenu
     def delete_word
       Shoes.app title: "Choose word to delete", width:200 do
         words = LoadDictionary.load_all_words
-        stack do              
+        stack do
           words.map do |word|
             button word["word"] do
               if LoadDictionary.delete_word word
@@ -279,7 +279,7 @@ class GraphicsWindowMenu
       Shoes.app title: "Choose player to delete", width:200 do
         players = LoadPlayers.load_all_players
         stack do
-          players.map do |player| 
+          players.map do |player|
             button player['player_name'] do
               if LoadPlayers.delete_player player
                 alert "The player is succesfully deleted!"

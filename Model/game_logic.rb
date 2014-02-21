@@ -1,9 +1,9 @@
 class GameLogic
-  
+
   attr_reader :choosen_word, :category, :alphabet, :pattern, :bad_guesses
-  
+
   PATTERN_SYMBOL = '*'
-  
+
   def initialize(word: nil,category: nil,description: nil)
     @alphabet = (10...36).map { |i| i.to_s 36 }
     @choosen_word = word.downcase
@@ -14,7 +14,7 @@ class GameLogic
     @guessed_letters = []
     @bad_guesses = 0
   end
-  
+
   def play(guess)
     if guess == @initial_word
       @pattern = @initial_word.upcase
@@ -25,9 +25,9 @@ class GameLogic
     status = :win unless @pattern.include? PATTERN_SYMBOL
     status
   end
-  
+
   private
-  
+
   def game_continue(guess)
       guess = /[[:alpha:]]/.match(guess) ? guess.downcase.strip : nil
       @alphabet.delete_if { |i| i == guess }
@@ -42,7 +42,7 @@ class GameLogic
         return :repeated_letter
       end
   end
-  
+
   def make_pattern_for_word(word)
       word.tr("a-z", PATTERN_SYMBOL)
   end
@@ -54,6 +54,6 @@ class GameLogic
           @pattern = make_pattern_for_word @choosen_word
       end
   end
-  
+
 end
 

@@ -7,14 +7,14 @@ module GUI
   MENU_MULTYPLAYER = "Multiplayer"
   MENU_OPTIONS = "Options"
   MENU_SCORES = "Scores"
-  
-  
-  
+
+
+
   OPTIONS_ADD_WORD = "Add word"
   OPTIONS_DELETE_WORD = "Delete word"
   OPTION_ADD_PLAYER = "Add player"
   OPTION_DELETE_PLAYER = "Delete player"
-  
+
   @option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER]
 
   Shoes.app  title: "Main menu", #set window size
@@ -30,6 +30,6 @@ module GUI
   def choose_dictionary
   end
    Shoes.app do #shoes main menu options
-    
+
   end
 end
