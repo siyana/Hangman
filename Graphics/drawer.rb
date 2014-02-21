@@ -4,20 +4,23 @@ class Drawer
   CANVAS_WIDTH = 30
   CANVAS_HEIGHT = 13
   
-  def initialize
-      @canvas = Graphics::Canvas.new CANVAS_WIDTH, CANVAS_HEIGHT
+  def initialize(width,height)
+      @width = width
+      @height = height
+      @canvas = Graphics::Canvas.new @width, @height
   end
   
   def draw_bottom_gibbet_line
-    @canvas.draw Shapes::Line.new(Shapes::Point.new(23, CANVAS_HEIGHT - 1), Shapes::Point.new(CANVAS_WIDTH - 1, CANVAS_HEIGHT - 1))
+    #@canvas.draw Shapes::Line.new(Shapes::Point.new(23, CANVAS_HEIGHT - 1), Shapes::Point.new(CANVAS_WIDTH - 1, CANVAS_HEIGHT - 1))
+    @canvas.draw Shapes::Line.new(Shapes::Point.new(@width - 7, CANVAS_HEIGHT - 1), Shapes::Point.new(CANVAS_WIDTH - 1, CANVAS_HEIGHT - 1))
   end
   
   def draw_vertical_gibbet_line
-    @canvas.draw Shapes::Line.new(Shapes::Point.new(26, 0), Shapes::Point.new(26, CANVAS_HEIGHT - 1))
+    @canvas.draw Shapes::Line.new(Shapes::Point.new(@width - 4, 0), Shapes::Point.new(@width - 4, CANVAS_HEIGHT - 1))
   end
   
   def draw_top_gibbet_line
-    @canvas.draw Shapes::Line.new(Shapes::Point.new(4, 0), Shapes::Point.new(26, 0))
+    @canvas.draw Shapes::Line.new(Shapes::Point.new(4, 0), Shapes::Point.new(@width - 4, 0))
   end
   
   def draw_small_vertical_gibbet_line

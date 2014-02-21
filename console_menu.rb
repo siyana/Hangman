@@ -17,11 +17,11 @@ module ConsoleMenu
   private
   
   MENU_AGANST_PC = "Against PC"
-  MENU_MULTYPLAYER = "Multiplayer"
+  MENU_MULTIPLAYER = "Multiplayer"
   MENU_OPTIONS = "Options"
   MENU_SCORES = "Scores"
   
-  @main_menu_options = [MENU_AGANST_PC, MENU_MULTYPLAYER, MENU_OPTIONS, MENU_SCORES]
+  @main_menu_options = [MENU_AGANST_PC, MENU_MULTIPLAYER, MENU_OPTIONS, MENU_SCORES]
   
   OPTIONS_ADD_WORD = "Add word"
   OPTIONS_DELETE_WORD = "Delete word"
@@ -92,7 +92,7 @@ module ConsoleMenu
   end
   
   def start_game
-    drawer = Drawer.new
+    drawer = Drawer.new 30,13
     loop do
       puts "\nYour word's category is: #{@game.category}. Your alphabet is : #{@game.alphabet.join(", ").upcase}."
       puts "Make a guess: #{@game.pattern}"

@@ -17,7 +17,10 @@ class GameLogic
   end
   
   def play(guess)
-    return :win if guess == @initial_word
+    if guess == @initial_word
+      @pattern = @initial_word.upcase
+      return :win
+    end
     status = game_continue(guess)
     status = :loss if @pattern.include? PATTERN_SYMBOL and @bad_guesses >= 10
     status = :win unless @pattern.include? PATTERN_SYMBOL

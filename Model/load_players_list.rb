@@ -29,6 +29,14 @@ module LoadPlayers
     all_players[player_index] = player
     write_to_json all_players
   end
+
+  def get_player_score(player_index)
+    load_all_players[player_index]['player_score']
+  end
+
+  def get_player_name(player_index)
+    load_all_players[player_index]['player_name']
+  end
   
   private
   
