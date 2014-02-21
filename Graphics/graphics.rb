@@ -26,6 +26,8 @@ module Graphics
     end
   end
   
+  private
+  
   class Renderers
     class BaseRenderer
       attr_reader :canvas

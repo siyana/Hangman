@@ -1,5 +1,4 @@
 require_relative "spec_helper.rb"
-require "json"
 
 describe LoadDictionary do
   let(:json_records) { JSON.parse(IO.read "./Model/words_dictionary.json") }
@@ -14,7 +13,7 @@ describe LoadDictionary do
       LoadDictionary.get_all_categories.should_not eq json_records.map { |word| word["category"]}
     end
     it "should load all uniq categories" do
-        LoadDictionary.get_all_categories.should eq json_records.map { |word| word["category"]}.uniq
+      LoadDictionary.get_all_categories.should eq json_records.map { |word| word["category"]}.uniq
     end
   end
   
@@ -31,9 +30,7 @@ describe LoadDictionary do
     it "should load dictionary only from words in current category" do
       dictionary = LoadDictionary.make_dictionary_by_category "Name"
       test_dictionary = []
-      json_records.each do |word|
-        test_dictionary << word if word["category"] == "Name"
-      end
+      json_records.each { |word| test_dictionary << word if word["category"] == "Name" }
       dictionary.should eq test_dictionary
     end
   end
@@ -42,9 +39,7 @@ describe LoadDictionary do
     it "should load dictionary only from words with current length" do
       dictionary = LoadDictionary.make_dictionary_by_word_length 5
       test_dictionary = []
-      json_records.each do |word|
-        test_dictionary << word if word["word"].length == 5
-      end
+      json_records.each { |word| test_dictionary << word if word["word"].length == 5 }
       dictionary.should eq test_dictionary
     end
   end
@@ -87,10 +82,10 @@ describe LoadDictionary do
       json_records.any? { |word| word['word'] == added_word['word']}.should be_true
     end
     it "should not duplicated words in json file" do
-        added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
-        LoadDictionary.add_word(added_word)
-        added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
-        json_records.select { |word| word['word'] == added_word['word']}.length.should eq 1
+      added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
+      LoadDictionary.add_word(added_word)
+      added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
+      json_records.select { |word| word['word'] == added_word['word']}.length.should eq 1
     end
   end
   

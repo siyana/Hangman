@@ -81,8 +81,8 @@ describe GameLogic do
     end
     
     it "should stop game if the written word is choosen word and there is not guessed letters" do
-        @game.play('w')
-        @game.play('varna').should eq :win
+      @game.play('w')
+      @game.play('varna').should eq :win
     end
   end  
 end
