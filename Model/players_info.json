@@ -1,7 +1,7 @@
 [
   {
     "player_name": "Gosho",
-    "player_score": 184
+    "player_score": 190
   },
   {
     "player_name": "Genadi",
@@ -17,6 +17,6 @@
   },
   {
     "player_name": "Test player",
-    "player_score": 0
+    "player_score": 1
   }
 ]

@@ -6,7 +6,6 @@ class GameLogic
   
   def initialize(word: nil,category: nil,description: nil)
     @alphabet = (10...36).map { |i| i.to_s 36 }
-    #load word from file
     @choosen_word = word.downcase
     @initial_word = @choosen_word
     @category = category

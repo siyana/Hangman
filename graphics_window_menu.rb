@@ -135,7 +135,7 @@ class GraphicsWindowMenu
   end
 
   def start_game(game, player_index, opponent_index)
-    Shoes.app title: "Let's play a game" do
+    Shoes.app title: "Let's play a game", width: 400, height: 200 do
       StartGame.new self, game, player_index, opponent_index
     end
   end
@@ -165,7 +165,7 @@ class GraphicsWindowMenu
 
     def show_pattern
       @current_pattern.clear() unless @current_pattern.nil? 
-      @current_pattern = @app.para "Make a guess: #{@game.pattern}"
+      @current_pattern = @app.caption "Make a guess: #{@game.pattern}"
     end
 
     def make_guess(guess)
@@ -185,7 +185,7 @@ class GraphicsWindowMenu
         when :guessed_letter
           @app.alert "Yeah! You rulz :*"
         when :incorrect_letter
-          @app.alert "Nope..."
+          @app.alert "Nope... You have #{10 - @game.bad_guesses} attempts remaining "
         when :repeated_letter
           @app.alert "It's not that letter, bro. You've already tried it!"           
       end
@@ -294,6 +294,6 @@ class GraphicsWindowMenu
   end
 end
 
-Shoes.app  title: "Hangman", width: 400, height: 100, scroll: true do
+Shoes.app  title: "Hangman", width: 350, height: 100, scroll: true do
   GraphicsWindowMenu.new self
 end
