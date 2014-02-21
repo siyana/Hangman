@@ -135,60 +135,64 @@ class GraphicsWindowMenu
   end
 
   def start_game(game, player_index, opponent_index)
-    Shoes.app do
-      stack do  
-        #drawer = Drawer.new 30, 13
-        draw_hangman_phases = [:draw_bottom_gibbet_line,
-                          :draw_vertical_gibbet_line,
-                          :draw_top_gibbet_line,
-                          :draw_small_vertical_gibbet_line,
-                          :draw_hangman_head,
-                          :draw_hangman_body,
-                          :draw_hangman_right_arm,
-                          :draw_hangman_left_arm,
-                          :draw_hangman_right_foot,
-                          :draw_hangman_left_foot]       
-        text_field = edit_line
-        make_guess_button = button "Make guess"
-        current_alphabet = para "\nYour word's category is: #{game.category}. Your alphabet is : #{game.alphabet.join(", ").upcase}."
-        current_pattern = para "Make a guess: #{game.pattern}"
-        message = para ''
-        hangman = ''
-        make_guess_button.click do           
-          guess = text_field.text().strip
-          result = game.play(guess)  
-          message.clear()
-          case result
-            when :loss
-              message = para "You lose, bro... The word is #{game.choosen_word.upcase}."
-              make_guess_button.clear()
-              text_field.clear
-            when :win
-              message = para "You win! The word is #{game.choosen_word.upcase}."
-              opponent_index.nil? ? LoadPlayers.update_player_score(player_index) : LoadPlayers.update_player_score(opponent_index)
-              alert "#{LoadPlayers.get_player_name opponent_index.nil? ? player_index : opponent_index} has
-                     #{LoadPlayers.get_player_score opponent_index.nil? ? player_index : opponent_index} points"
-              make_guess_button.clear()
-              text_field.clear
-            when :guessed_letter
-              message = para "Yeah! You rulz :*"
-            when :incorrect_letter
-              # hangman.clear()
-              # drawer.public_send draw_hangman_phases[game.bad_guesses - 1]
-              # hangman = para drawer.render_canvas
-              message = para "Nope..."
-            when :repeated_letter
-              message = "It's not that letter, bro. You've already tried it!"
-            # else            
-          end
-          current_alphabet.clear()
-          current_alphabet = para "\nYour word's category is: #{game.category}. Your alphabet is : #{game.alphabet.join(", ").upcase}."
-
-          current_pattern.clear()
-          current_pattern = para "Make a guess: #{game.pattern}"
-        end
-      end
+    Shoes.app title: "Let's play a game" do
+      StartGame.new self, game, player_index, opponent_index
     end
+  end
+
+  class StartGame
+
+    def initialize(app, game, player_index, opponent_index)
+      @app = app
+      @game = game
+      @player_index = player_index
+      @opponent_index = opponent_index
+      start_game
+    end
+    
+    def start_game
+      @text_field = @app.edit_line
+      @make_guess_button = @app.button "Make guess"
+      show_alphabet
+      show_pattern
+      @make_guess_button.click do make_guess @text_field.text().lstrip end
+    end
+
+    def show_alphabet
+      @current_alphabet.clear() unless @current_alphabet.nil?
+      @current_alphabet = @app.para "\nYour word's category is: #{@game.category}. Your alphabet is : #{@game.alphabet.join(", ").upcase}."
+    end
+
+    def show_pattern
+      @current_pattern.clear() unless @current_pattern.nil? 
+      @current_pattern = @app.para "Make a guess: #{@game.pattern}"
+    end
+
+    def make_guess(guess)
+      result = @game.play(guess)
+      case result
+        when :loss
+          @app.alert "You lose, bro... The word is #{@game.choosen_word.upcase}."
+          @make_guess_button.clear()
+          @text_field.clear()
+        when :win
+          @app.alert "You win! The word is #{@game.choosen_word.upcase}."
+          @opponent_index.nil? ? LoadPlayers.update_player_score(@player_index) : LoadPlayers.update_player_score(@opponent_index)
+          @app.alert "#{LoadPlayers.get_player_name @opponent_index.nil? ? @player_index : @opponent_index} has
+                 #{LoadPlayers.get_player_score @opponent_index.nil? ? @player_index : @opponent_index} points"
+          @make_guess_button.clear()
+          @text_field.clear()
+        when :guessed_letter
+          @app.alert "Yeah! You rulz :*"
+        when :incorrect_letter
+          @app.alert "Nope..."
+        when :repeated_letter
+          @app.alert "It's not that letter, bro. You've already tried it!"           
+      end
+      show_alphabet
+      show_pattern
+    end
+
   end
 
   class OptionMenu
@@ -217,7 +221,8 @@ class GraphicsWindowMenu
       end
     end
     
-
+    private
+    
     def add_player
       Shoes.app title: "Add player:", width: 300, height: 100 do
         para "Player name:"

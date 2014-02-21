@@ -38,5 +38,10 @@
     "word": "Test",
     "category": "Test",
     "description": "Test"
+  },
+  {
+    "word": "New",
+    "category": "New",
+    "description": "New"
   }
 ]
