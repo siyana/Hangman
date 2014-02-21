@@ -9,18 +9,12 @@ describe LoadDictionary do
   end
   
   describe "#get_all_categories" do
-    it "should not load repeated categories" do
-      LoadDictionary.get_all_categories.should_not eq json_records.map { |word| word["category"]}
-    end
     it "should load all uniq categories" do
       LoadDictionary.get_all_categories.should eq json_records.map { |word| word["category"]}.uniq
     end
   end
   
   describe "#get_all_word_lengths" do
-    it "should not load repeated lengths" do
-      LoadDictionary.get_all_word_lengths.should_not eq json_records.map { |word| word["word"].length}
-    end
     it "should load all uniq lengths sorted in ascending order" do
       LoadDictionary.get_all_word_lengths.should eq json_records.map { |word| word["word"].length}.uniq.sort
     end
@@ -49,13 +43,13 @@ describe LoadDictionary do
     it "should load word from current dictionary by category" do
       dictionary = LoadDictionary.make_dictionary_by_category "Name"
       random_word = LoadDictionary.random_word_from_dictionary dictionary
-      dictionary.include? random_word.should be_true
+      dictionary.include? random_word.should be_true unless dictionary.empty?
     end
     
     it "should load word from current dictionary by category" do
       dictionary = LoadDictionary.make_dictionary_by_word_length 5
       random_word = LoadDictionary.random_word_from_dictionary dictionary
-      dictionary.include? random_word.should be_true
+      dictionary.include? random_word.should be_true unless dictionary.empty?
     end
     
     it "should load random word from current dictionary by category" do

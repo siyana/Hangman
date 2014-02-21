@@ -11,14 +11,14 @@ describe LoadPlayers do
   
   describe "#add_player" do
     it "should add new player to json file" do
-      added_player = {"player_name" => "Test Player".capitalize, "player_score" => "0"}
+      added_player = {"player_name" => "Test Player".capitalize, "player_score" => 0}
       LoadPlayers.add_player added_player
       LoadPlayers.load_all_players.any? { |player| player['player_name'] == added_player['player_name']}.should be_true
     end
     it "should not duplicated players in json file" do
-      added_player = {"player_name" => "Test Player".capitalize, "player_score" => "0"}
+      added_player = {"player_name" => "Test Player".capitalize, "player_score" => 0}
       LoadPlayers.add_player added_player
-      added_player = {"player_name" => "Test Player".capitalize, "player_score" => "0"}
+      added_player = {"player_name" => "Test Player".capitalize, "player_score" => 0}
       LoadPlayers.load_all_players.select { |player| player['player_name'] == added_player['player_name']}.length.should eq 1
     end
   end
@@ -32,14 +32,6 @@ describe LoadPlayers do
     end
   end
   
-  describe "#delete_player" do
-    it "should delete player from json file" do
-      deleted_player = {"player_name" => "Test Player".capitalize, "player_score" => "0"}
-      LoadPlayers.delete_player deleted_player
-      LoadPlayers.load_all_players.none? { |player| player['player_name'] == deleted_player['player_name']}.should be_true
-    end
-  end
-  
   describe "#get_player_score" do
     it "should return current player's score" do
       LoadPlayers.get_player_score(0).should eq LoadPlayers.load_all_players[0]["player_score"]
@@ -49,6 +41,14 @@ describe LoadPlayers do
   describe "#get_player_name" do
     it "should return choosen player's name" do
       LoadPlayers.get_player_name(0).should eq LoadPlayers.load_all_players[0]["player_name"]
+    end
+  end
+
+   describe "#delete_player" do
+    it "should delete player from json file" do
+      deleted_player = LoadPlayers.load_all_players.last
+      LoadPlayers.delete_player deleted_player
+      LoadPlayers.load_all_players.none? { |player| player['player_name'] == deleted_player['player_name']}.should be_true
     end
   end
   

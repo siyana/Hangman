@@ -44,13 +44,18 @@ module ConsoleMenu
   #show menus methods
   
   def choose_dictionary
-    puts "Do you wanna see categories or word's length? Enter your choice:"
-    show_options_for_menu ["By category", "By length"]
-    choice = gets.strip.to_i
-    case choice
-      when 1 then choose_dictionary_by_category
-      when 2 then choose_dictionary_by_length
-    end
+    if LoadDictionary.load_all_words.empty?
+      puts "There's no words. Please, add some in menu options."
+      show_start_menu
+    else
+      puts "Do you wanna see categories or word's length? Enter your choice:"
+      show_options_for_menu ["By category", "By length"]
+      choice = gets.strip.to_i
+      case choice
+        when 1 then choose_dictionary_by_category
+        when 2 then choose_dictionary_by_length
+      end
+    end    
   end
   
   def show_options_menu
@@ -174,16 +179,26 @@ module ConsoleMenu
   
   #player methods
   def choose_player
-    puts "Please, choose player:"
     all_players = LoadPlayers.load_all_players
-    all_players.each_with_index { |player, index| puts "#{index + 1}. #{player['player_name']}"}
+    if all_players.empty? 
+      return puts "There's no players. Please add some."
+    elsif @player_index and all_players.length == 1
+      return puts "There's no other players. Please add some."
+    end        
+    puts "Please, choose player:"
+    all_players.each_with_index { |player, index| puts "#{index + 1}. #{player['player_name']}" if index != @player_index}
     puts "Enter choosen player number:"
     gets.strip.to_i - 1
   end
   
   def choose_opponent
     @opponent_index = choose_player
-    choose_dictionary
+    if @opponent_index 
+      choose_dictionary
+    else 
+      puts "You cant play multiplayer because there're no other players, please add or choose 'Against PC'."
+      show_start_menu
+    end
   end
   
   #option menu methods
@@ -216,7 +231,7 @@ module ConsoleMenu
   def add_player
     puts "Enter the name of your player:"
     player = gets.strip
-    result = LoadPlayers.add_player({"player_name" => player.capitalize, "player_score" => "0"})
+    result = LoadPlayers.add_player({"player_name" => player.capitalize, "player_score" => 0})
     if result == :succesfully_added
       puts "Your player is added correctly."
     elsif result == :duplicated_name
