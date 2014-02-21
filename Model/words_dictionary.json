@@ -43,5 +43,10 @@
     "word": "New",
     "category": "New",
     "description": "New"
+  },
+  {
+    "word": "Word",
+    "category": "new category",
+    "description": "this is desc"
   }
 ]

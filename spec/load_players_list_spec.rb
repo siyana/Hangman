@@ -21,6 +21,23 @@ describe LoadPlayers do
       added_player = {"player_name" => "Test Player".capitalize, "player_score" => 0}
       LoadPlayers.load_all_players.select { |player| player['player_name'] == added_player['player_name']}.length.should eq 1
     end
+    it "should not add player whose name is not valid" do
+      added_player = {"player_name" => "1".capitalize, "player_score" => 0}
+      LoadPlayers.add_player added_player
+      LoadPlayers.load_all_players.none? { |player| player['player_name'] == added_player['player_name']}.should be_true
+    end
+    it "should not add player with blank name" do
+      added_player = {"player_name" => " ".capitalize, "player_score" => 0}
+      LoadPlayers.add_player added_player
+      LoadPlayers.load_all_players.none? { |player| player['player_name'] == added_player['player_name']}.should be_true
+    end
+
+    it "should not add spaces after and before player name" do
+      added_player = {"player_name" => "  Name  ", "player_score" => 0}
+      LoadPlayers.add_player added_player
+      LoadPlayers.load_all_players.none? { |player| player['player_name'] == "  Name  "}.should be_true
+      LoadPlayers.load_all_players.select { |player| player['player_name'] == "Name"}.length.should eq 1
+    end
   end
   
   describe "#update_player_score" do

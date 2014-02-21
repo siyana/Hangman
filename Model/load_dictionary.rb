@@ -45,6 +45,7 @@ module LoadDictionary
   #word methods
   def add_word(word)
     return :not_valid unless /[[:alpha:]]/.match(word["word"])
+    word["word"] = word["word"].strip.capitalize
     all_words = load_all_words
     delete_repeated_or_choosen all_words, word
     all_words << word

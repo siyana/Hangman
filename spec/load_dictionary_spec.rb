@@ -73,14 +73,32 @@ describe LoadDictionary do
     it "should add word to json file" do
       added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
       LoadDictionary.add_word added_word
-      json_records.any? { |word| word['word'] == added_word['word']}.should be_true
+      LoadDictionary.load_all_words.any? { |word| word['word'] == added_word['word']}.should be_true
     end
     it "should not duplicated words in json file" do
       added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
       LoadDictionary.add_word(added_word)
       added_word = {"word" => "new word".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
-      json_records.select { |word| word['word'] == added_word['word']}.length.should eq 1
+      LoadDictionary.load_all_words.select { |word| word['word'] == added_word['word']}.length.should eq 1
     end
+    it "should not add word which is not valid" do
+      added_word = {"word" => "1".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
+      LoadDictionary.add_word(added_word)
+      LoadDictionary.load_all_words.none? { |word| word['word'] == added_word['word']}.should be_true
+    end
+
+    it "should not add blank word" do 
+      added_word = {"word" => " ".capitalize, "category" => "new category".capitalize, "description" => "this is desc".capitalize}
+      LoadDictionary.add_word(added_word)
+      LoadDictionary.load_all_words.none? { |word| word['word'] == added_word['word']}.should be_true
+    end
+
+    it "should not add spaces after and before player name" do
+      added_word = {"word" => " word   ", "category" => "new category", "description" => "this is desc"}
+      LoadDictionary.add_word added_word
+      LoadDictionary.load_all_words.none? { |word| word['word'] == " word   "}.should be_true
+    end
+
   end
   
   describe "#delete_word" do

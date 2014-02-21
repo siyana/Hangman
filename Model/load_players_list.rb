@@ -10,6 +10,7 @@ module LoadPlayers
   
   def add_player(player)
     return :not_valid unless /[[:alpha:]]/.match(player["player_name"])
+    player["player_name"] = player["player_name"].strip.capitalize
     all_players =load_all_players
     return :duplicated_name if check_for_player_name player["player_name"], all_players
     all_players << player

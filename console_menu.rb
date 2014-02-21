@@ -242,7 +242,7 @@ module ConsoleMenu
   def add_player
     puts "Enter the name of your player:"
     player = gets.strip
-    result = LoadPlayers.add_player({"player_name" => player.capitalize, "player_score" => 0})
+    result = LoadPlayers.add_player({"player_name" => player, "player_score" => 0})
     case result 
       when :succesfully_added then puts "Your player is added correctly."
       when :duplicated_name
