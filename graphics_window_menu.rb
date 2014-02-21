@@ -28,11 +28,6 @@ class GraphicsWindowMenu
   MENU_MULTIPLAYER = "Multiplayer"
   MENU_OPTIONS = "Options"
   MENU_SCORES = "Scores" 
-  
-  OPTIONS_ADD_WORD = "Add word"
-  OPTIONS_DELETE_WORD = "Delete word"
-  OPTION_ADD_PLAYER = "Add player"
-  OPTION_DELETE_PLAYER = "Delete player"
 
   #help methods
 
@@ -57,90 +52,7 @@ class GraphicsWindowMenu
 
   def show_options_menu
     Shoes.app title: "Option menu:", width: 100, height: 200 do
-      stack do 
-        option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER]
-        option_menu_options.map do |option|
-          button "#{option}" do
-            case option
-              when OPTIONS_ADD_WORD then add_word
-              when OPTIONS_DELETE_WORD then delete_word
-              when OPTION_ADD_PLAYER then add_player
-              when OPTION_DELETE_PLAYER then delete_player
-            end
-          end
-        end
-
-        def add_player
-          Shoes.app title: "Add player:", width: 200, height: 100 do
-            para "Player name:"
-            player_field = edit_line
-            button "Add player" do
-              result = LoadPlayers.add_player({"player_name" => player_field.text().capitalize, "player_score" => 0})
-              if result == :succesfully_added
-                alert "Your player is added correctly."
-              elsif result == :duplicated_name
-                alert "Enter new name. This is already taken:"
-              else
-                alert "There is an error in adding player."
-              end
-            end
-          end
-        end#end add_player
-
-        def add_word
-          Shoes.app title: "Add your word:" do
-            para "Word:"
-            word_field = edit_line
-            para "Category of your word is:"
-            category_field = edit_line
-            para "Word description (optionaly):"
-            word_description_field = edit_line
-            button "Add word" do
-              if LoadDictionary.add_word({"word" => word_field.text().capitalize, "category" => category_field.text().capitalize, "description" => word_description_field.text().capitalize})
-                alert "Your word is succesfully added!"
-              else
-                alert "There's an error in adding word :/"
-              end
-            end
-          end
-        end#end add_word
-
-        def delete_word
-          Shoes.app title: "Choose word to delete", width:200 do
-            words = LoadDictionary.load_all_words
-            stack do              
-              words.map do |word|
-                button word["word"] do
-                  if LoadDictionary.delete_word word
-                    alert "The word is succesfully deleted!"
-                  else
-                    alert "There is an error in deleting word :/"
-                  end
-                end
-              end
-            end
-          end
-        end#end delete_word
-
-        def delete_player
-          Shoes.app title: "Choose player to delete", width:200 do
-            players = LoadPlayers.load_all_players
-            stack do
-              players.map do |player| 
-                button player['player_name'] do
-                  if LoadPlayers.delete_player player
-                    alert "The player is succesfully deleted!"
-                  else
-                    alert "There is an error in deleting player :/"
-                  end
-                end
-              end
-            end
-          end
-        end#end delete_player
-
-      end
-      #get_users_choice_for_option_menu
+      OptionMenu.new self
     end
   end
 
@@ -277,6 +189,103 @@ class GraphicsWindowMenu
         end
       end
     end
+  end
+
+  class OptionMenu
+    OPTIONS_ADD_WORD = "Add word"
+    OPTIONS_DELETE_WORD = "Delete word"
+    OPTION_ADD_PLAYER = "Add player"
+    OPTION_DELETE_PLAYER = "Delete player"
+    def initialize(app)
+      @app = app
+      @option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER]
+      show_options_menu
+    end
+    
+    def show_options_menu
+      @app.stack do        
+        @option_menu_options.map do |option|
+          @app.button "#{option}" do
+            case option
+              when OPTIONS_ADD_WORD then add_word
+              when OPTIONS_DELETE_WORD then delete_word
+              when OPTION_ADD_PLAYER then add_player
+              when OPTION_DELETE_PLAYER then delete_player
+            end
+          end
+        end
+      end
+    end
+    
+
+    def add_player
+      Shoes.app title: "Add player:", width: 300, height: 100 do
+        para "Player name:"
+        player_field = edit_line
+        button "Add player" do
+          result = LoadPlayers.add_player({"player_name" => player_field.text().capitalize, "player_score" => 0})
+          if result == :succesfully_added
+            alert "Your player is added correctly."
+          elsif result == :duplicated_name
+            alert "Enter new name. This is already taken:"
+          else
+            alert "There is an error in adding player."
+          end
+        end
+      end
+    end#end add_player
+
+    def add_word
+      Shoes.app title: "Add your word:", width: 300, height: 200 do
+        para "Word:"
+        word_field = edit_line
+        para "Category of your word is:"
+        category_field = edit_line
+        para "Word description (optionaly):"
+        word_description_field = edit_line
+        button "Add word" do
+          if LoadDictionary.add_word({"word" => word_field.text().capitalize, "category" => category_field.text().capitalize, "description" => word_description_field.text().capitalize})
+            alert "Your word is succesfully added!"
+          else
+            alert "There's an error in adding word :/"
+          end
+        end
+      end
+    end#end add_word
+
+    def delete_word
+      Shoes.app title: "Choose word to delete", width:200 do
+        words = LoadDictionary.load_all_words
+        stack do              
+          words.map do |word|
+            button word["word"] do
+              if LoadDictionary.delete_word word
+                alert "The word is succesfully deleted!"
+              else
+                alert "There is an error in deleting word :/"
+              end
+            end
+          end
+        end
+      end
+    end#end delete_word
+
+    def delete_player
+      Shoes.app title: "Choose player to delete", width:200 do
+        players = LoadPlayers.load_all_players
+        stack do
+          players.map do |player| 
+            button player['player_name'] do
+              if LoadPlayers.delete_player player
+                alert "The player is succesfully deleted!"
+              else
+                alert "There is an error in deleting player :/"
+              end
+            end
+          end
+        end
+      end
+    end#end delete_player
   end
 end
 
