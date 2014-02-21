@@ -44,8 +44,8 @@ module LoadDictionary
   
   #word methods
   def add_word(word)
+    return :not_valid unless /[[:alpha:]]/.match(word["word"])
     all_words = load_all_words
-    #ako q ima da ne dobavq, da izpisva syobshtenie
     delete_repeated_or_choosen all_words, word
     all_words << word
     write_to_json all_words

@@ -20,8 +20,9 @@ module ConsoleMenu
   MENU_MULTIPLAYER = "Multiplayer"
   MENU_OPTIONS = "Options"
   MENU_SCORES = "Scores"
+  MENU_EXIT = "Exit"
   
-  @main_menu_options = [MENU_AGANST_PC, MENU_MULTIPLAYER, MENU_OPTIONS, MENU_SCORES]
+  @main_menu_options = [MENU_AGANST_PC, MENU_MULTIPLAYER, MENU_OPTIONS, MENU_SCORES, MENU_EXIT]
   
   OPTIONS_ADD_WORD = "Add word"
   OPTIONS_DELETE_WORD = "Delete word"
@@ -121,8 +122,7 @@ module ConsoleMenu
           puts "It's not that letter, bro. You've already tried it!"
         when :not_a_letter
           "Please, enter a letter"
-        else
-        
+        else        
       end
     end
   end
@@ -130,9 +130,9 @@ module ConsoleMenu
   #help methods
   
   def show_dictionary(dictionary)
-      dictionary.each_with_index do |word, index|
-          puts "#{index + 1}. #{word['word']}"
-      end
+    dictionary.each_with_index do |word, index|
+      puts "#{index + 1}. #{word['word']}"
+    end
   end
   def show_options_for_menu(menu)
     menu.each_with_index do |option, index|
@@ -151,19 +151,15 @@ module ConsoleMenu
     puts "Please, enter the number of your choice:"
     choice = gets.strip.to_i
     case choice
-    when 1
-      #add_word_method in LoadDict
-      add_word
-    when 2
-      #delete_word_method in LoadDict
-      delete_word
-    when 3
-      #add_player method in PlayersManager
-      add_player
-    when 4
-      #delete_player method in PlayersManager
-      delete_player
+    when 1 then add_word
+    when 2 then delete_word
+    when 3 then add_player
+    when 4 then delete_player
+    else 
+      puts "Please, enter valid number! This is not a valid choice!"
+      show_options_menu
     end
+    show_start_menu
   end
   
   def get_users_choice_for_main_menu
@@ -174,6 +170,10 @@ module ConsoleMenu
       when 2 then choose_opponent
       when 3 then show_options_menu
       when 4 then show_scores
+      when 5 then return
+      else
+        puts "Please, enter valid number! This is not a valid choice!"
+        show_start_menu
     end
   end
   
@@ -188,12 +188,17 @@ module ConsoleMenu
     puts "Please, choose player:"
     all_players.each_with_index { |player, index| puts "#{index + 1}. #{player['player_name']}" if index != @player_index}
     puts "Enter choosen player number:"
-    gets.strip.to_i - 1
+    choice = gets.strip.to_i - 1
+    unless choice < all_players.length and choice >= 0 and choice != @player_index
+      puts "Please, enter valid player number!"
+      choose_player
+    end
+    choice
   end
   
   def choose_opponent
     @opponent_index = choose_player
-    if @opponent_index 
+    if @opponent_index
       choose_dictionary
     else 
       puts "You cant play multiplayer because there're no other players, please add or choose 'Against PC'."
@@ -209,10 +214,15 @@ module ConsoleMenu
     category = gets.strip
     puts "Word description (optionaly):"
     word_description = gets.strip
-    if LoadDictionary.add_word({"word" => word.capitalize, "category" => category.capitalize, "description" => word_description.capitalize})
+    result = LoadDictionary.add_word({"word" => word.capitalize, "category" => category.capitalize, "description" => word_description.capitalize})
+    if result and result != :not_valid
       puts "Your word is succesfully added!"
+    elsif result == :not_valid
+      puts "This is not a valid word. Please, use only letters"
+      add_word
     else
       puts "There's an error in adding word :/"
+      add_word
     end
   end
   
@@ -226,19 +236,23 @@ module ConsoleMenu
     else
       puts "There is an error in deleting word :/"
     end
+
   end
   
   def add_player
     puts "Enter the name of your player:"
     player = gets.strip
     result = LoadPlayers.add_player({"player_name" => player.capitalize, "player_score" => 0})
-    if result == :succesfully_added
-      puts "Your player is added correctly."
-    elsif result == :duplicated_name
-      puts "Enter new name. This is already taken:"
-      add_player
-    else
-      puts "There is an error in adding player."
+    case result 
+      when :succesfully_added then puts "Your player is added correctly."
+      when :duplicated_name
+        puts "Enter new name. This is already taken:"
+        add_player
+      when :not_valid
+        puts "This is not valid name! The name should concist only letters."
+        add_player
+      else 
+        puts "There is an error in adding player."
     end
   end
   
@@ -254,4 +268,5 @@ module ConsoleMenu
     end
   end
 end
+
 ConsoleMenu.start
