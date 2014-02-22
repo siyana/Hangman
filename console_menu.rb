@@ -97,6 +97,10 @@ module ConsoleMenu
         show_dictionary dictionary
         puts "Please, enter number of your word"
         choice = gets.to_i - 1
+        unless choice < dictionary.length and choice >= 0
+          puts "Please, enter valid word number next time! Now you will get random word."
+          choice = 0
+        end
         game_choice = LoadDictionary.choose_word_from_dictionary dictionary, choice
     end
     @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
@@ -150,9 +154,9 @@ module ConsoleMenu
     @all_types = method
     show_options_for_menu @all_types
     choice = gets.strip.to_i
-    unless choice < @all_types.length and choice >= 0
+    unless choice < @all_types.length and choice > 0
       puts "Please, enter valid dictionary number next time! Now you will get random dictionary."
-      choice = 0
+      choice = 1
     end
     choice
   end
