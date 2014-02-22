@@ -28,5 +28,10 @@
     "word": "Plovdiv",
     "category": "City",
     "description": ""
+  },
+  {
+    "word": "Word",
+    "category": "new category",
+    "description": "this is desc"
   }
 ]

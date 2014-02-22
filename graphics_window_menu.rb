@@ -6,6 +6,10 @@ class GraphicsWindowMenu
 
   attr_accessor :player_index, :opponent_index
 
+  MENU_AGANST_PC = "Against PC"
+  MENU_MULTIPLAYER = "Multiplayer"
+  MENU_OPTIONS = "Options"
+  MENU_SCORES = "Scores"
 
   def initialize(app)
   	@app = app
@@ -13,39 +17,51 @@ class GraphicsWindowMenu
   	choose_player
   end
 
-  def show_start_menu
+  def show_start_menu(player_index)
     @app.flow do
     	@main_menu_buttons = @main_menu_options.map do |option|
           				           @app.button "#{option}"
         					         end
     end
-  	get_users_choice_for_main_menu
+  	get_users_choice_for_main_menu(player_index)
   end
 
   private
 
-  MENU_AGANST_PC = "Against PC"
-  MENU_MULTIPLAYER = "Multiplayer"
-  MENU_OPTIONS = "Options"
-  MENU_SCORES = "Scores"
-
   #help methods
 
-  def get_users_choice_for_main_menu
+  def choose_player
+    paragraph = @app.para "Please, choose player:"
+    all_players = LoadPlayers.load_all_players
+    list = @app.list_box items:all_players.map { |player| player["player_name"] }
+    button = @app.button "Choose" do
+      all_players.each_with_index { |player, index| @player_index = index if player["player_name"] == list.text() }
+      paragraph.clear()
+      list.clear()
+      button.clear()
+      show_start_menu(@player_index)
+    end
+  end
+
+  def get_users_choice_for_main_menu(player_index)
     @main_menu_buttons[0].click do
-      @initial_choice = MENU_AGANST_PC
-      choose_dictionary
+      #@initial_choice = MENU_AGANST_PC
+      Shoes.app title: "Against PC", width: 400 do
+        GameMode.new self,:against_pc, player_index
+      end
     end
     @main_menu_buttons[1].click do
-      @initial_choice = MENU_MULTIPLAYER
-      choose_opponent
+      #@initial_choice = MENU_MULTIPLAYER
+      Shoes.app title: "Multiplayer", width: 400 do
+        GameMode.new self,:against_pc, player_index
+      end
     end
     @main_menu_buttons[2].click do
-      @initial_choice = MENU_OPTIONS
+      #@initial_choice = MENU_OPTIONS
       show_options_menu
     end
     @main_menu_buttons[3].click do
-      @initial_choice = MENU_SCORES
+      #@initial_choice = MENU_SCORES
       show_scores
     end
   end
@@ -62,82 +78,86 @@ class GraphicsWindowMenu
      @app.alert scores
   end
 
-  def choose_dictionary
-    @app.para "Do you wanna see categories or word's length? Enter your choice:"
-    by_category = @app.button "By category"
-    by_category.click { choose_dictionary_by_category }
-    by_length = @app.button "By length"
-    by_length.click { choose_dictionary_by_length }
-  end
-
-  #player methods
-
-  def choose_player
-    paragraph = @app.para "Please, choose player:"
-    all_players = LoadPlayers.load_all_players
-    list = @app.list_box items:all_players.map { |player| player["player_name"] }
-    button = @app.button "Choose" do
-      all_players.each_with_index { |player, index| @player_index = index if player["player_name"] == list.text() }
-      paragraph.clear()
-      list.clear()
-      button.clear()
-      show_start_menu
+  class GameMode
+    def initialize(app,game_mode, player_index)
+      @app = app
+      @player_index = player_index
+      @game_mode = game_mode
+      show_proper_menu
     end
-  end
 
-  def choose_opponent
-    paragraph = @app.para "Please, choose opponent:"
-    all_players = LoadPlayers.load_all_players
-    players_names = all_players.select { |player,index| player["player_name"] != all_players[@player_index]["player_name"] }
-    list = @app.list_box items:players_names.map { |player| player["player_name"]}
-    button = @app.button "Choose" do
-      all_players.each_with_index { |player, index| @opponent_index = index if player["player_name"] == list.text() }
-      paragraph.clear()
-      list.clear()
-      button.clear()
-      choose_dictionary
+    def show_proper_menu
+      case @game_mode
+        when :against_pc then choose_dictionary
+        when :multiplayer then choose_opponent
+      end
     end
-  end
-  #choose dictionary methods
 
-  def choose_dictionary_by_category
-    @app.para "Please, choose a dictionary:"
-    all_types = LoadDictionary.get_all_categories
-    all_types.map do |option|
-      @app.button "#{option}" do load_words_from_dictionary LoadDictionary.make_dictionary_by_category option end
+    def choose_dictionary
+      @app.para "Do you wanna see categories or word's length? Enter your choice:"
+      by_category = @app.button "By category"
+      by_category.click { choose_dictionary_by_category }
+      by_length = @app.button "By length"
+      by_length.click { choose_dictionary_by_length }
+    end  
+
+    #player methods
+
+    def choose_opponent
+      paragraph = @app.para "Please, choose opponent:"
+      all_players = LoadPlayers.load_all_players
+      players_names = all_players.select { |player,index| player["player_name"] != all_players[@player_index]["player_name"] }
+      list = @app.list_box items:players_names.map { |player| player["player_name"]}
+      button = @app.button "Choose" do
+        all_players.each_with_index { |player, index| @opponent_index = index if player["player_name"] == list.text() }
+        paragraph.clear()
+        list.clear()
+        button.clear()
+        choose_dictionary
+      end
     end
-  end
 
-  def choose_dictionary_by_length
-    @app.para "Please, choose a dictionary:"
-    all_types = LoadDictionary.get_all_word_lengths
-    all_types.map do |option|
-      @app.button "#{option}" do load_words_from_dictionary LoadDictionary.make_dictionary_by_word_length option end
+    #choose dictionary methods
+
+    def choose_dictionary_by_category
+      @app.para "Please, choose a dictionary:"
+      all_types = LoadDictionary.get_all_categories
+      all_types.map do |option|
+        @app.button "#{option}" do load_words_from_dictionary LoadDictionary.make_dictionary_by_category option end
+      end
     end
-  end
 
-  def load_words_from_dictionary(dictionary)
-    case @initial_choice
-      when MENU_AGANST_PC
-        game_choice = LoadDictionary.random_word_from_dictionary dictionary
-        @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
-        start_game(@game, @player_index, @opponent_index)
-      when MENU_MULTIPLAYER
-        @app.para "Please, choose a word"
-        dictionary.each_with_index do |word, index|
-          @app.button "#{word['word']}" do
-            game_choice = LoadDictionary.choose_word_from_dictionary dictionary, index
-            @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
-            start_game(@game, @player_index, @opponent_index)
+    def choose_dictionary_by_length
+      @app.para "Please, choose a dictionary:"
+      all_types = LoadDictionary.get_all_word_lengths
+      all_types.map do |option|
+        @app.button "#{option}" do load_words_from_dictionary LoadDictionary.make_dictionary_by_word_length option end
+      end
+    end
+
+    def load_words_from_dictionary(dictionary)
+      case @game_mode
+        when :against_pc
+          game_choice = LoadDictionary.random_word_from_dictionary dictionary
+          @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
+          start_game(@game, @player_index, @opponent_index)
+        when :multiplayer
+          @app.para "Please, choose a word"
+          dictionary.each_with_index do |word, index|
+            @app.button "#{word['word']}" do
+              game_choice = LoadDictionary.choose_word_from_dictionary dictionary, index
+              @game = GameLogic.new word: game_choice["word"], category: game_choice["category"], description: game_choice["description"]
+              start_game(@game, @player_index, @opponent_index)
+            end
           end
-        end
+      end
     end
-  end
 
-  def start_game(game, player_index, opponent_index)
-    Shoes.app title: "Let's play a game", width: 400, height: 200 do
-      StartGame.new self, game, player_index, opponent_index
-    end
+    def start_game(game, player_index, opponent_index)
+      Shoes.app title: "Let's play a game", width: 400, height: 200 do
+        GraphicsWindowMenu::StartGame.new self, game, player_index, opponent_index
+      end
+    end    
   end
 
   class StartGame
