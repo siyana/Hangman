@@ -34,7 +34,8 @@ class GraphicsWindowMenu
     paragraph = @app.para "Please, choose player:"
     all_players = LoadPlayers.load_all_players
     list = @app.list_box items:all_players.map { |player| player["player_name"] }
-    button = @app.button "Choose" do
+    button_name = all_players.empty? ? "Guest" : "Choose"
+    button = @app.button button_name do
       all_players.each_with_index { |player, index| @player_index = index if player["player_name"] == list.text() }
       paragraph.clear()
       list.clear()
@@ -53,7 +54,7 @@ class GraphicsWindowMenu
     @main_menu_buttons[1].click do
       #@initial_choice = MENU_MULTIPLAYER
       Shoes.app title: "Multiplayer", width: 400 do
-        GameMode.new self,:against_pc, player_index
+        GameMode.new self,:multiplayer, player_index
       end
     end
     @main_menu_buttons[2].click do
@@ -108,7 +109,8 @@ class GraphicsWindowMenu
       all_players = LoadPlayers.load_all_players
       players_names = all_players.select { |player,index| player["player_name"] != all_players[@player_index]["player_name"] }
       list = @app.list_box items:players_names.map { |player| player["player_name"]}
-      button = @app.button "Choose" do
+      button_name = all_players.empty? ? "Guest" : "Choose"
+      button = @app.button button_name do
         all_players.each_with_index { |player, index| @opponent_index = index if player["player_name"] == list.text() }
         paragraph.clear()
         list.clear()
