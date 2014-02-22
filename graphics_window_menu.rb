@@ -238,6 +238,7 @@ class GraphicsWindowMenu
           else
             alert "There is an error in adding player."
           end
+          close
         end
       end
     end#end add_player
@@ -256,6 +257,7 @@ class GraphicsWindowMenu
           else
             alert "There's an error in adding word :/"
           end
+          close
         end
       end
     end#end add_word
@@ -271,6 +273,7 @@ class GraphicsWindowMenu
               else
                 alert "There is an error in deleting word :/"
               end
+              close
             end
           end
         end
@@ -288,6 +291,7 @@ class GraphicsWindowMenu
               else
                 alert "There is an error in deleting player :/"
               end
+              close
             end
           end
         end
