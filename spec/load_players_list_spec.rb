@@ -47,6 +47,11 @@ describe LoadPlayers do
       new_score = LoadPlayers.load_all_players[0]["player_score"]
       new_score.should eq (previous_score + 1)
     end
+
+    it "should not update score for guest and not valid player" do
+      LoadPlayers.update_player_score(-1).should eq :not_valid_index
+      LoadPlayers.update_player_score(nil).should eq :guest
+    end
   end
   
   describe "#get_player_score" do

@@ -27,6 +27,8 @@ module LoadPlayers
   def update_player_score(player_index)
     all_players = load_all_players
     return :guest if player_index.nil?
+    not_valid_index = player_index < 0 or player_index > all_players.length
+    return :not_valid_index if not_valid_index
     player = all_players[player_index]
     player["player_score"] += 1
     all_players[player_index] = player
