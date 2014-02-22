@@ -48,5 +48,20 @@
     "word": "Word",
     "category": "new category",
     "description": "this is desc"
+  },
+  {
+    "word": "Word",
+    "category": "Word",
+    "description": "Word"
+  },
+  {
+    "word": "Word",
+    "category": "Word",
+    "description": "W"
+  },
+  {
+    "word": "W",
+    "category": "W",
+    "description": "W"
   }
 ]

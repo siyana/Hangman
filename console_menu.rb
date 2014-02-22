@@ -28,8 +28,9 @@ module ConsoleMenu
   OPTIONS_DELETE_WORD = "Delete word"
   OPTION_ADD_PLAYER = "Add player"
   OPTION_DELETE_PLAYER = "Delete player"
+  OPTION_GET_BACK = "Get back"
 
-  @option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER]
+  @option_menu_options = [OPTIONS_ADD_WORD, OPTIONS_DELETE_WORD, OPTION_ADD_PLAYER, OPTION_DELETE_PLAYER, OPTION_GET_BACK]
 
   @draw_hangman_phases = [:draw_bottom_gibbet_line,
                           :draw_vertical_gibbet_line,
@@ -69,9 +70,11 @@ module ConsoleMenu
   end
 
   def show_scores
-    #sort scores
     all_players = LoadPlayers.load_all_players
     all_players.map { |player| puts "#{player['player_name']}   #{player['player_score']}"}
+    puts "Press any key to get back to start menu:"
+    gets.strip
+    show_start_menu    
   end
 
   #choose dictionary methods
@@ -162,9 +165,11 @@ module ConsoleMenu
     when 2 then delete_word
     when 3 then add_player
     when 4 then delete_player
+    when 5 then show_start_menu
     else
       puts "Please, enter valid number! This is not a valid choice!"
       show_options_menu
+      return
     end
     show_start_menu
   end
