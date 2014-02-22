@@ -26,6 +26,7 @@ module LoadPlayers
 
   def update_player_score(player_index)
     all_players = load_all_players
+    return :guest if all_players.empty?
     player = all_players[player_index]
     player["player_score"] += 1
     all_players[player_index] = player

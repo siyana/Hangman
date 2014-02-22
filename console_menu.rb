@@ -120,7 +120,8 @@ module ConsoleMenu
           break
         when :win
           puts "You win! The word is #{@game.choosen_word.upcase}."
-          @opponent_index.nil? ? LoadPlayers.update_player_score(@player_index) : LoadPlayers.update_player_score(@opponent_index)
+          result = @opponent_index.nil? ? LoadPlayers.update_player_score(@player_index) : LoadPlayers.update_player_score(@opponent_index)
+          puts "You're guest. To create new player go to options menu." if result == :guest
           break
         when :guessed_letter
           puts "Yeah! You rulz :*"

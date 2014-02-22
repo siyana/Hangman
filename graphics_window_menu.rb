@@ -197,9 +197,13 @@ class GraphicsWindowMenu
           @text_field.clear()
         when :win
           @app.alert "You win! The word is #{@game.choosen_word.upcase}."
-          @opponent_index.nil? ? LoadPlayers.update_player_score(@player_index) : LoadPlayers.update_player_score(@opponent_index)
-          @app.alert "#{LoadPlayers.get_player_name @opponent_index.nil? ? @player_index : @opponent_index} has
-                 #{LoadPlayers.get_player_score @opponent_index.nil? ? @player_index : @opponent_index} points"
+          result = @opponent_index.nil? ? LoadPlayers.update_player_score(@player_index) : LoadPlayers.update_player_score(@opponent_index)
+          if result != :guest
+            @app.alert "#{LoadPlayers.get_player_name @opponent_index.nil? ? @player_index : @opponent_index} has
+                   #{LoadPlayers.get_player_score @opponent_index.nil? ? @player_index : @opponent_index} points"
+          else
+            @app.alert "You're guest. To create new player go to options menu"
+          end
           @make_guess_button.clear()
           @text_field.clear()
         when :guessed_letter
